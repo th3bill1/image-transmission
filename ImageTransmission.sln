@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.11.12324.101 stable
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageTransmission.Api", "src\ImageTransmission.Api\ImageTransmission.Api.csproj", "{DB51FE69-6E49-42AE-BD00-AE21CB527073}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageTransmission.AppHost", "src\ImageTransmission.AppHost\ImageTransmission.AppHost.csproj", "{87C0F0D5-4FBE-4F15-ADB8-38654D82634D}"
@@ -17,13 +15,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageTransmission.Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageTransmission.ServiceDefaults", "src\ImageTransmission.ServiceDefaults\ImageTransmission.ServiceDefaults.csproj", "{30D34305-032A-458C-ACDD-A8A62F59C4D1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageTransmission.Api.Tests", "tests\ImageTransmission.Api.Tests\ImageTransmission.Api.Tests.csproj", "{F0D1BA6C-73E4-4470-B420-3F5D5BF1F4B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageTransmission.Application.Tests", "tests\ImageTransmission.Application.Tests\ImageTransmission.Application.Tests.csproj", "{25515ACE-6DBD-4E3D-8840-FADF00F5E189}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageTransmission.Core.Tests", "tests\ImageTransmission.Core.Tests\ImageTransmission.Core.Tests.csproj", "{91B5753D-665C-4C51-B4D5-CB59751DC076}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ImageTransmission.Frontend", "frontend\ImageTransmission.Frontend.esproj", "{9EFD6F22-378F-0422-B1DE-324E37CCDE97}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CAB7C1ED-218C-496F-BD0A-6729C7A09FC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,19 +143,34 @@ Global
 		{91B5753D-665C-4C51-B4D5-CB59751DC076}.Release|x64.Build.0 = Release|Any CPU
 		{91B5753D-665C-4C51-B4D5-CB59751DC076}.Release|x86.ActiveCfg = Release|Any CPU
 		{91B5753D-665C-4C51-B4D5-CB59751DC076}.Release|x86.Build.0 = Release|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Debug|x64.Build.0 = Debug|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Debug|x86.Build.0 = Debug|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Release|x64.ActiveCfg = Release|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Release|x64.Build.0 = Release|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Release|x64.Deploy.0 = Release|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Release|x86.ActiveCfg = Release|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Release|x86.Build.0 = Release|Any CPU
+		{9EFD6F22-378F-0422-B1DE-324E37CCDE97}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{DB51FE69-6E49-42AE-BD00-AE21CB527073} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{87C0F0D5-4FBE-4F15-ADB8-38654D82634D} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{CFF02F3C-A90A-41F8-923A-CEC3DCA3412B} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{8B2BB3A5-EA6C-4F02-90F3-F6764A68D379} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{803D31B9-9E60-4CF6-B023-D9E33DF0838C} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{30D34305-032A-458C-ACDD-A8A62F59C4D1} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{F0D1BA6C-73E4-4470-B420-3F5D5BF1F4B9} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
-		{25515ACE-6DBD-4E3D-8840-FADF00F5E189} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
-		{91B5753D-665C-4C51-B4D5-CB59751DC076} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{F0D1BA6C-73E4-4470-B420-3F5D5BF1F4B9} = {CAB7C1ED-218C-496F-BD0A-6729C7A09FC6}
+		{25515ACE-6DBD-4E3D-8840-FADF00F5E189} = {CAB7C1ED-218C-496F-BD0A-6729C7A09FC6}
+		{91B5753D-665C-4C51-B4D5-CB59751DC076} = {CAB7C1ED-218C-496F-BD0A-6729C7A09FC6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3448346-78E3-4F0A-BDAA-EE3D9D42ABA8}
 	EndGlobalSection
 EndGlobal
