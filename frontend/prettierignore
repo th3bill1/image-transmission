@@ -1,0 +1,10 @@
+.angular
+dist
+output
+out-tsc
+node_modules
+src/assets
+package-lock.json
+*.ts
+*.js
+*.mjs

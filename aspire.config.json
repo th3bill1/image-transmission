@@ -1,0 +1,5 @@
+{
+  "appHost": {
+    "path": "src/ImageTransmission.AppHost/ImageTransmission.AppHost.csproj"
+  }
+}
