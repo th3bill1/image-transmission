@@ -10,6 +10,7 @@ import {
   SimulationControls
 } from './components/simulation-controls/simulation-controls';
 import { TranslationService } from './services/translation-service/translation.service';
+import { ImageService } from './services/image-service/image.service';
 
 @Component({
   imports: [AppHeader, ImageUpload, SimulationControls, SimulationResult],
@@ -21,6 +22,8 @@ import { TranslationService } from './services/translation-service/translation.s
 })
 export class App implements OnDestroy {
   private readonly translation = inject(TranslationService);
+
+  private readonly imageService = inject(ImageService);
 
   isDarkMode = false;
 
@@ -83,7 +86,7 @@ export class App implements OnDestroy {
     this.isDarkMode = !this.isDarkMode;
   }
 
-  protected loadImage(file: File): void {
+  protected async loadImage(file: File): Promise<void> {
     this.uploadError.set('');
     this.simulationMessage.set('');
     if (!file.type.startsWith('image/')) {
@@ -96,15 +99,18 @@ export class App implements OnDestroy {
     }
     if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
     this.selectedFile.set(file);
-    this.previewUrl.set(URL.createObjectURL(file));
-    const image = new Image();
-    image.onload = () => {
+    this.previewUrl.set(null);
+    try {
+      const grayscale = await this.imageService.uploadAndGetGrayscale(file);
+      this.previewUrl.set(grayscale.url);
       this.imageDimensions.set(this.translation.translate('image.dimensions', {
-        width: image.naturalWidth,
-        height: image.naturalHeight
+        width: grayscale.width,
+        height: grayscale.height
       }));
-    };
-    image.src = this.previewUrl()!;
+    } catch {
+      this.selectedFile.set(null);
+      this.uploadError.set(this.translation.translate('image.uploadFailed'));
+    }
   }
 
   protected clearImage(): void {

@@ -1,10 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { TranslationService } from './services/translation-service/translation.service';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [App]
+      imports: [App],
+      providers: [
+        {
+          provide: TranslationService,
+          useValue: {
+            currentLocale: 'en',
+            translate: (key: string) => (
+              key === 'app.title' ? 'Transmit an image through noise' : key
+            )
+          }
+        }
+      ]
     }).compileComponents();
   });
 

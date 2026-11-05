@@ -1,23 +1,24 @@
-import { Service, signal } from '@angular/core';
-import type { I18n } from 'i18n';
-import { translations } from '../../translations';
+import { Service, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { WebApiService } from '../web-api/web-api.service';
 
-type TranslationKey = keyof (typeof translations)['en'];
-type Locale = keyof typeof translations;
+export type TranslationKey = string;
+export type Locale = 'en' | 'pl';
 
 @Service()
 export class TranslationService {
+  private readonly api = inject(WebApiService);
+
   private readonly locale = signal<Locale>(this.detectLocale());
 
-  private readonly i18n: Pick<I18n, '__'> = {
-    __: key => {
-      const localeTranslation = translations[this.locale()][key as TranslationKey];
-      return localeTranslation ?? translations.en[key as TranslationKey] ?? key;
-    }
-  };
+  private readonly translations = signal<Record<string, string>>({});
+
+  public async initialize(): Promise<void> {
+    await this.loadLocale(this.locale());
+  }
 
   public translate(key: TranslationKey, values: Record<string, string | number> = {}): string {
-    let text = this.i18n.__(key);
+    let text = this.translations()[key] ?? key;
     for (const [name, value] of Object.entries(values)) {
       text = text.replaceAll(`{{${name}}}`, String(value));
     }
@@ -29,14 +30,19 @@ export class TranslationService {
   }
 
   public toggleLocale(): void {
-    this.locale.update(locale => (locale === 'en' ? 'pl' : 'en'));
+    const nextLocale: Locale = this.locale() === 'en' ? 'pl' : 'en';
+    void this.loadLocale(nextLocale);
+  }
+
+  private async loadLocale(locale: Locale): Promise<void> {
+    const translations = await firstValueFrom(this.api.getTranslations(locale));
+    this.translations.set(translations);
+    this.locale.set(locale);
   }
 
   private detectLocale(): Locale {
-    if (typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('pl')) {
-      return 'pl';
-    }
-
-    return 'en';
+    return typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('pl')
+      ? 'pl'
+      : 'en';
   }
 }
