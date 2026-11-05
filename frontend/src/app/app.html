@@ -16,6 +16,7 @@
     <app-image-upload
       [selectedFile]="selectedFile()"
       [previewUrl]="previewUrl()"
+      [isUploading]="isUploading()"
       [imageDimensions]="imageDimensions()"
       [uploadError]="uploadError()"
       (fileSelected)="loadImage($event)"

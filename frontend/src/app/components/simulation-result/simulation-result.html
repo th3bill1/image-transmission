@@ -16,11 +16,8 @@
 
     <div class="result-preview">
       @if (previewUrl(); as preview) {
-        <img
-          fill
-          [ngSrc]="preview"
-          [alt]="translation.translate('flow.receivedImage')"
-        />
+        <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -->
+        <img [src]="preview" [alt]="translation.translate('flow.receivedImage')" />
       }
       <span>{{ translation.translate('flow.receivedImage') }}</span>
     </div>

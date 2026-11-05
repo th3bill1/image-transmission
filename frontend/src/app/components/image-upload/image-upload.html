@@ -13,6 +13,7 @@
     class="dropzone"
     [class.has-image]="previewUrl()"
     [class.drag-active]="isDragActive"
+    [attr.aria-busy]="isUploading()"
     (dragenter)="onDragEnter($event)"
     (dragover)="$event.preventDefault()"
     (dragleave)="onDragLeave($event)"
@@ -24,13 +25,15 @@
         <strong>{{ translation.translate('image.dragActive') }}</strong>
       </div>
     } @else {
-    @if (previewUrl(); as preview) {
-      <img
-        fill
-        class="preview-image"
-        [ngSrc]="preview"
-        [alt]="translation.translate('image.uploadedAlt')"
-      />
+    @if (isUploading()) {
+      <div class="upload-spinner" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>{{ translation.translate('image.processing') }}</span>
+      </div>
+    } @else if (previewUrl(); as preview) {
+      <!-- eslint-disable @angular-eslint/template/prefer-ngsrc -->
+      <img class="preview-image" [src]="preview" [alt]="translation.translate('image.uploadedAlt')" />
+      <!-- eslint-enable @angular-eslint/template/prefer-ngsrc -->
       <div class="preview-overlay">
         <p>{{ translation.translate('image.original') }}</p>
         <span>{{ translation.translate('image.grayscale') }}</span>
@@ -44,7 +47,7 @@
         <p>{{ translation.translate('image.formats') }}</p>
       </div>
     }
-    <label class="upload-button">
+    <label class="upload-button" [class.disabled]="isUploading()">
       {{ translation.translate(previewUrl() ? 'image.chooseDifferent' : 'image.browse') }}
       <input
         type="file"

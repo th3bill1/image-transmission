@@ -26,6 +26,7 @@
   "image.invalidType": "Please choose a PNG, JPEG, GIF, or WebP image.",
   "image.tooLarge": "This image is larger than the 10 MB limit.",
   "image.uploadFailed": "The image could not be uploaded. Please try again.",
+  "image.processing": "Converting image to grayscale...",
   "image.uploadIcon": "↑",
   "simulation.section": "02 / Simulation setup",
   "simulation.heading": "Configure the channel",

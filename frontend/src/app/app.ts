@@ -31,6 +31,8 @@ export class App implements OnDestroy {
 
   protected readonly previewUrl = signal<string | null>(null);
 
+  protected readonly isUploading = signal(false);
+
   protected readonly imageDimensions = signal('');
 
   protected readonly uploadError = signal('');
@@ -100,6 +102,7 @@ export class App implements OnDestroy {
     if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
     this.selectedFile.set(file);
     this.previewUrl.set(null);
+    this.isUploading.set(true);
     try {
       const grayscale = await this.imageService.uploadAndGetGrayscale(file);
       this.previewUrl.set(grayscale.url);
@@ -110,6 +113,8 @@ export class App implements OnDestroy {
     } catch {
       this.selectedFile.set(null);
       this.uploadError.set(this.translation.translate('image.uploadFailed'));
+    } finally {
+      this.isUploading.set(false);
     }
   }
 
@@ -117,6 +122,7 @@ export class App implements OnDestroy {
     if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
     this.selectedFile.set(null);
     this.previewUrl.set(null);
+    this.isUploading.set(false);
     this.imageDimensions.set('');
     this.simulationMessage.set('');
   }

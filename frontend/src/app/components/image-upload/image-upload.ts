@@ -1,9 +1,9 @@
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 import { TranslationService } from '../../services/translation-service/translation.service';
 
 @Component({
-  imports: [CommonModule, NgOptimizedImage],
+  imports: [CommonModule],
   selector: 'app-image-upload',
   templateUrl: './image-upload.html'
 })
@@ -17,6 +17,8 @@ export class ImageUpload {
   readonly selectedFile = input<File | null>(null);
 
   readonly previewUrl = input<string | null>(null);
+
+  readonly isUploading = input(false);
 
   readonly imageDimensions = input('');
 

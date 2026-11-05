@@ -26,6 +26,7 @@
   "image.invalidType": "Wybierz obraz w formacie PNG, JPEG, GIF lub WebP.",
   "image.tooLarge": "Ten obraz jest większy niż limit 10 MB.",
   "image.uploadFailed": "Nie udało się przesłać obrazu. Spróbuj ponownie.",
+  "image.processing": "Konwertowanie obrazu do skali szarości...",
   "image.uploadIcon": "↑",
   "simulation.section": "02 / Konfiguracja symulacji",
   "simulation.heading": "Skonfiguruj kanał",
