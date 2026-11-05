@@ -10,6 +10,8 @@ export class AppHeader {
 
   readonly isDarkMode = input(false);
 
+  readonly currentStep = input(1);
+
   protected readonly toggleTheme = output<void>();
 
   protected toggleLanguage(): void {

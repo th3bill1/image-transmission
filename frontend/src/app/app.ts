@@ -1,6 +1,10 @@
-import { Component, OnDestroy, inject } from '@angular/core';
+import { Component, OnDestroy, inject, signal } from '@angular/core';
 import { AppHeader } from './components/app-header/app-header';
 import { ImageUpload } from './components/image-upload/image-upload';
+import {
+  SimulationPhase,
+  SimulationResult
+} from './components/simulation-result/simulation-result';
 import {
   CodecOption,
   SimulationControls
@@ -8,7 +12,7 @@ import {
 import { TranslationService } from './services/translation-service/translation.service';
 
 @Component({
-  imports: [AppHeader, ImageUpload, SimulationControls],
+  imports: [AppHeader, ImageUpload, SimulationControls, SimulationResult],
   selector: 'app-root',
   templateUrl: './app.html',
   host: {
@@ -20,15 +24,15 @@ export class App implements OnDestroy {
 
   isDarkMode = false;
 
-  protected selectedFile: File | null = null;
+  protected readonly selectedFile = signal<File | null>(null);
 
-  protected previewUrl: string | null = null;
+  protected readonly previewUrl = signal<string | null>(null);
 
-  protected imageDimensions = '';
+  protected readonly imageDimensions = signal('');
 
-  protected uploadError = '';
+  protected readonly uploadError = signal('');
 
-  protected simulationMessage = '';
+  protected readonly simulationMessage = signal('');
 
   protected codec = 'hamming74';
 
@@ -41,6 +45,10 @@ export class App implements OnDestroy {
   protected burstCount = 1;
 
   protected randomSeed: number | null = null;
+
+  protected readonly simulationPhase = signal<SimulationPhase | null>(null);
+
+  private simulationTimer: ReturnType<typeof setTimeout> | null = null;
 
   protected get codecOptions(): readonly CodecOption[] {
     return [
@@ -76,42 +84,53 @@ export class App implements OnDestroy {
   }
 
   protected loadImage(file: File): void {
-    this.uploadError = '';
-    this.simulationMessage = '';
+    this.uploadError.set('');
+    this.simulationMessage.set('');
     if (!file.type.startsWith('image/')) {
-      this.uploadError = this.translation.translate('image.invalidType');
+      this.uploadError.set(this.translation.translate('image.invalidType'));
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      this.uploadError = this.translation.translate('image.tooLarge');
+      this.uploadError.set(this.translation.translate('image.tooLarge'));
       return;
     }
-    if (this.previewUrl) URL.revokeObjectURL(this.previewUrl);
-    this.selectedFile = file;
-    this.previewUrl = URL.createObjectURL(file);
+    if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
+    this.selectedFile.set(file);
+    this.previewUrl.set(URL.createObjectURL(file));
     const image = new Image();
     image.onload = () => {
-      this.imageDimensions = this.translation.translate('image.dimensions', {
+      this.imageDimensions.set(this.translation.translate('image.dimensions', {
         width: image.naturalWidth,
         height: image.naturalHeight
-      });
+      }));
     };
-    image.src = this.previewUrl;
+    image.src = this.previewUrl()!;
   }
 
   protected clearImage(): void {
-    if (this.previewUrl) URL.revokeObjectURL(this.previewUrl);
-    this.selectedFile = null;
-    this.previewUrl = null;
-    this.imageDimensions = '';
-    this.simulationMessage = '';
+    if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
+    this.selectedFile.set(null);
+    this.previewUrl.set(null);
+    this.imageDimensions.set('');
+    this.simulationMessage.set('');
   }
 
   protected startSimulation(): void {
-    this.simulationMessage = this.translation.translate('simulation.saved');
+    this.simulationMessage.set('');
+    this.simulationPhase.set('processing');
+    if (this.simulationTimer) clearTimeout(this.simulationTimer);
+    this.simulationTimer = setTimeout(() => {
+      this.simulationPhase.set('results');
+      this.simulationTimer = null;
+    }, 1200);
+  }
+
+  protected resetSimulation(): void {
+    this.simulationPhase.set(null);
   }
 
   public ngOnDestroy(): void {
-    if (this.previewUrl) URL.revokeObjectURL(this.previewUrl);
+    if (this.simulationTimer) clearTimeout(this.simulationTimer);
+    if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
   }
 }

@@ -1,0 +1,51 @@
+@if (phase() === 'processing') {
+  <section class="flow-screen panel" aria-labelledby="processing-heading">
+    <p class="section-kicker">{{ translation.translate('flow.processingSection') }}</p>
+    <div class="processing-visual" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    <h2 id="processing-heading">{{ translation.translate('flow.processingHeading') }}</h2>
+    <p class="flow-text">{{ translation.translate('flow.processingText') }}</p>
+    <p class="flow-note">{{ translation.translate('flow.processingNote') }}</p>
+  </section>
+} @else {
+  <section class="flow-screen panel" aria-labelledby="results-heading">
+    <p class="section-kicker">{{ translation.translate('flow.resultsSection') }}</p>
+    <h2 id="results-heading">{{ translation.translate('flow.resultsHeading') }}</h2>
+    <p class="flow-text">{{ translation.translate('flow.resultsText') }}</p>
+
+    <div class="result-preview">
+      @if (previewUrl(); as preview) {
+        <img
+          fill
+          [ngSrc]="preview"
+          [alt]="translation.translate('flow.receivedImage')"
+        />
+      }
+      <span>{{ translation.translate('flow.receivedImage') }}</span>
+    </div>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <strong>7</strong>
+        <span>{{ translation.translate('flow.bitErrors') }}</span>
+        <small>{{ translation.translate('flow.mockValue') }}</small>
+      </div>
+      <div class="result-card">
+        <strong>7</strong>
+        <span>{{ translation.translate('flow.correctedErrors') }}</span>
+        <small>{{ translation.translate('flow.mockValue') }}</small>
+      </div>
+      <div class="result-card">
+        <strong>98.6%</strong>
+        <span>{{ translation.translate('flow.signalQuality') }}</span>
+        <small>{{ translation.translate('flow.mockValue') }}</small>
+      </div>
+    </div>
+
+    <button class="primary-button flow-action" type="button" (click)="restart.emit()">
+      {{ translation.translate('flow.runAgain') }}
+      <span aria-hidden="true">→</span>
+    </button>
+  </section>
+}

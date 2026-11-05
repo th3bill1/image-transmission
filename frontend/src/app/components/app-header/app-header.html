@@ -6,7 +6,9 @@
     <p class="intro">{{ translation.translate('app.intro') }}</p>
   </div>
   <div class="header-actions">
-    <span class="step-badge">{{ translation.translate('app.step') }}</span>
+    <span class="step-badge">{{
+      translation.translate('app.step', { step: currentStep() })
+    }}</span>
     <button
       class="utility-button"
       type="button"

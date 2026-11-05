@@ -438,6 +438,122 @@ input:not([type='file']):focus {
   margin-top: 1rem;
   padding: 0.7rem;
 }
+.flow-screen {
+  margin: 0 auto;
+  max-width: 760px;
+  text-align: center;
+}
+.flow-screen h2 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  margin-top: 0.75rem;
+}
+.flow-text,
+.flow-note {
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0.85rem auto 0;
+  max-width: 540px;
+}
+.flow-note {
+  font-size: 0.78rem;
+  margin-top: 1.25rem;
+}
+.processing-visual {
+  align-items: flex-end;
+  display: flex;
+  gap: 0.4rem;
+  height: 3rem;
+  justify-content: center;
+  margin: 2rem auto 1.25rem;
+}
+.processing-visual span {
+  animation: processing-pulse 900ms ease-in-out infinite alternate;
+  background: var(--accent);
+  border-radius: 999px;
+  height: 1rem;
+  width: 0.7rem;
+}
+.processing-visual span:nth-child(2) {
+  animation-delay: 180ms;
+  height: 2rem;
+}
+.processing-visual span:nth-child(3) {
+  animation-delay: 360ms;
+  height: 1.5rem;
+}
+.result-preview {
+  background: var(--dropzone);
+  border: 1px solid var(--line);
+  border-radius: 0.8rem;
+  height: 220px;
+  margin: 1.5rem auto;
+  max-width: 420px;
+  overflow: hidden;
+  position: relative;
+}
+.result-preview img {
+  display: block;
+  filter: grayscale(1);
+  max-height: 220px;
+  object-fit: contain;
+  width: 100%;
+}
+.result-preview span {
+  background: #17211fd9;
+  bottom: 0;
+  color: #fff;
+  display: block;
+  font-size: 0.78rem;
+  left: 0;
+  padding: 0.65rem;
+  position: absolute;
+  right: 0;
+}
+.result-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 1.5rem 0;
+}
+.result-card {
+  background: var(--field);
+  border: 1px solid var(--line);
+  border-radius: 0.65rem;
+  padding: 1rem 0.75rem;
+}
+.result-card strong,
+.result-card span,
+.result-card small {
+  display: block;
+}
+.result-card strong {
+  color: var(--accent-dark);
+  font-size: 1.35rem;
+}
+.result-card span {
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-top: 0.35rem;
+}
+.result-card small {
+  color: var(--muted);
+  font-size: 0.68rem;
+  margin-top: 0.35rem;
+}
+.flow-action {
+  margin-top: 0.5rem;
+}
+@keyframes processing-pulse {
+  from {
+    opacity: 0.45;
+    transform: scaleY(0.65);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
 @media (max-width: 800px) {
   .app-shell {
     padding: 2.5rem 1rem;
@@ -460,6 +576,9 @@ input:not([type='file']):focus {
     justify-content: flex-start;
   }
   .control-grid {
+    grid-template-columns: 1fr;
+  }
+  .result-grid {
     grid-template-columns: 1fr;
   }
   .control-footer {

@@ -1,22 +1,33 @@
 <main class="app-shell">
-  <app-header [isDarkMode]="isDarkMode" (toggleTheme)="toggleTheme()" />
+  <app-header
+    [isDarkMode]="isDarkMode"
+    [currentStep]="simulationPhase() ? (simulationPhase() === 'processing' ? 2 : 3) : 1"
+    (toggleTheme)="toggleTheme()"
+  />
 
-  <div class="workspace">
+  @if (simulationPhase(); as phase) {
+    <app-simulation-result
+      [phase]="phase"
+      [previewUrl]="previewUrl()"
+      (restart)="resetSimulation()"
+    />
+  } @else {
+    <div class="workspace">
     <app-image-upload
-      [selectedFile]="selectedFile"
-      [previewUrl]="previewUrl"
-      [imageDimensions]="imageDimensions"
-      [uploadError]="uploadError"
+      [selectedFile]="selectedFile()"
+      [previewUrl]="previewUrl()"
+      [imageDimensions]="imageDimensions()"
+      [uploadError]="uploadError()"
       (fileSelected)="loadImage($event)"
       (imageDropped)="loadImage($event)"
       (imageCleared)="clearImage()"
     />
 
     <app-simulation-controls
-      [previewUrl]="previewUrl"
+      [previewUrl]="previewUrl()"
       [codecOptions]="codecOptions"
       [selectedCodecDescription]="selectedCodecDescription"
-      [simulationMessage]="simulationMessage"
+      [simulationMessage]="simulationMessage()"
       [(codec)]="codec"
       [(noiseModel)]="noiseModel"
       [(errorProbability)]="errorProbability"
@@ -25,5 +36,6 @@
       [(randomSeed)]="randomSeed"
       (simulationStarted)="startSimulation()"
     />
-  </div>
+    </div>
+  }
 </main>
