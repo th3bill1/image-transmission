@@ -6,12 +6,7 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: [
-      'dist/**',
-      '.angular/**',
-      'coverage/**',
-      'node_modules/**'
-    ]
+    ignores: ['dist/**', '.angular/**', 'coverage/**', 'node_modules/**'],
   },
 
   // JavaScript
@@ -21,9 +16,9 @@ export default tseslint.config(
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.node
-      }
-    }
+        ...globals.node,
+      },
+    },
   },
 
   // TypeScript
@@ -32,15 +27,15 @@ export default tseslint.config(
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
-      ...angular.configs.tsRecommended
+      ...angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
     languageOptions: {
       globals: globals.browser,
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: import.meta.dirname
-      }
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
     rules: {
       '@typescript-eslint/no-unused-vars': [
@@ -53,8 +48,8 @@ export default tseslint.config(
           caughtErrors: 'all',
           caughtErrorsIgnorePattern: '^_',
           destructuredArrayIgnorePattern: '^_',
-          ignoreRestSiblings: true
-        }
+          ignoreRestSiblings: true,
+        },
       ],
 
       // Angular
@@ -81,15 +76,15 @@ export default tseslint.config(
       '@angular-eslint/contextual-decorator': 'error',
       '@angular-eslint/consistent-component-styles': ['error', 'string'],
       '@angular-eslint/relative-url-prefix': 'error',
-      '@angular-eslint/use-component-view-encapsulation': 'error'
-    }
+      '@angular-eslint/use-component-view-encapsulation': 'error',
+    },
   },
 
   // Stylistic rules
   {
     files: ['**/*.{js,cjs,mjs,ts}'],
     plugins: {
-      '@stylistic': stylistic
+      '@stylistic': stylistic,
     },
     rules: {
       '@stylistic/array-bracket-newline': ['error', { multiline: true }],
@@ -112,50 +107,44 @@ export default tseslint.config(
       '@stylistic/indent': ['error', 2],
       '@stylistic/indent-binary-ops': ['error', 2],
       '@stylistic/key-spacing': [
-        'error', {
+        'error',
+        {
           beforeColon: false,
           afterColon: true,
-          mode: 'strict'
-        }
+          mode: 'strict',
+        },
       ],
       '@stylistic/keyword-spacing': [
-        'error', {
+        'error',
+        {
           before: true,
-          after: true
-        }
+          after: true,
+        },
       ],
       '@stylistic/lines-between-class-members': ['error', 'always'],
       '@stylistic/max-statements-per-line': ['error', { max: 1 }],
-      '@stylistic/multiline-comment-style': [
-        'error',
-        'separate-lines',
-        { checkJSDoc: false }
-      ],
+      '@stylistic/multiline-comment-style': ['error', 'separate-lines', { checkJSDoc: false }],
       '@stylistic/multiline-ternary': ['error', 'always-multiline'],
       '@stylistic/new-parens': ['error', 'always'],
-      '@stylistic/newline-per-chained-call': [
-        'error',
-        { ignoreChainWithDepth: 2 }
-      ],
+      '@stylistic/newline-per-chained-call': ['error', { ignoreChainWithDepth: 2 }],
       '@stylistic/no-confusing-arrow': [
-        'error', {
+        'error',
+        {
           allowParens: true,
-          onlyOneSimpleParam: true
-        }
+          onlyOneSimpleParam: true,
+        },
       ],
       '@stylistic/no-extra-semi': 'error',
       '@stylistic/no-floating-decimal': 'error',
       '@stylistic/no-mixed-spaces-and-tabs': 'error',
       '@stylistic/no-multi-spaces': [
-        'error', {
-          ignoreEOLComments: false,
-          includeTabs: true
-        }
-      ],
-      '@stylistic/no-multiple-empty-lines': [
         'error',
-        { max: 1, maxBOF: 0, maxEOF: 0 }
+        {
+          ignoreEOLComments: false,
+          includeTabs: true,
+        },
       ],
+      '@stylistic/no-multiple-empty-lines': ['error', { max: 1, maxBOF: 0, maxEOF: 0 }],
       '@stylistic/no-tabs': 'error',
       '@stylistic/no-trailing-spaces': 'error',
       '@stylistic/no-whitespace-before-property': 'error',
@@ -168,51 +157,52 @@ export default tseslint.config(
       '@stylistic/rest-spread-spacing': ['error', 'never'],
       '@stylistic/semi': ['error', 'always'],
       '@stylistic/semi-spacing': [
-        'error', {
+        'error',
+        {
           before: false,
-          after: true
-        }
+          after: true,
+        },
       ],
       '@stylistic/semi-style': ['error', 'last'],
       '@stylistic/space-before-blocks': ['error', 'always'],
       '@stylistic/space-before-function-paren': [
-        'error', {
+        'error',
+        {
           named: 'never',
           anonymous: 'never',
-          asyncArrow: 'always'
-        }
+          asyncArrow: 'always',
+        },
       ],
       '@stylistic/space-in-parens': ['error', 'never'],
       '@stylistic/space-infix-ops': 'error',
       '@stylistic/space-unary-ops': [
-        'error', {
+        'error',
+        {
           words: true,
-          nonwords: false
-        }
+          nonwords: false,
+        },
       ],
       '@stylistic/spaced-comment': ['error', 'always'],
       '@stylistic/switch-colon-spacing': [
-        'error', {
+        'error',
+        {
           before: false,
-          after: true
-        }
+          after: true,
+        },
       ],
       '@stylistic/template-curly-spacing': ['error', 'never'],
       '@stylistic/template-tag-spacing': ['error', 'never'],
       '@stylistic/type-generic-spacing': 'error',
       '@stylistic/type-named-tuple-spacing': 'error',
       '@stylistic/wrap-iife': ['error', 'inside'],
-      '@stylistic/yield-star-spacing': ['error', 'after']
-    }
+      '@stylistic/yield-star-spacing': ['error', 'after'],
+    },
   },
 
   // Angular HTML templates
   {
     files: ['**/*.html'],
-    extends: [
-      ...angular.configs.templateRecommended,
-      ...angular.configs.templateAccessibility
-    ],
+    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
       '@angular-eslint/template/prefer-control-flow': 'error',
       '@angular-eslint/template/prefer-at-else': 'error',
@@ -223,14 +213,8 @@ export default tseslint.config(
       '@angular-eslint/template/prefer-class-binding': 'error',
       '@angular-eslint/template/prefer-style-binding': 'error',
       '@angular-eslint/template/prefer-ngsrc': 'error',
-      '@angular-eslint/template/conditional-complexity': [
-        'error',
-        { maxComplexity: 4 }
-      ],
-      '@angular-eslint/template/cyclomatic-complexity': [
-        'error',
-        { maxComplexity: 5 }
-      ],
+      '@angular-eslint/template/conditional-complexity': ['error', { maxComplexity: 4 }],
+      '@angular-eslint/template/cyclomatic-complexity': ['error', { maxComplexity: 5 }],
       '@angular-eslint/template/eqeqeq': 'error',
       '@angular-eslint/template/no-any': 'error',
       '@angular-eslint/template/no-non-null-assertion': 'error',
@@ -242,7 +226,7 @@ export default tseslint.config(
       '@angular-eslint/template/prefer-self-closing-tags': 'error',
       '@angular-eslint/template/prefer-static-string-properties': 'error',
       '@angular-eslint/template/prefer-template-literal': 'error',
-      '@angular-eslint/template/prefer-built-in-pipes': 'error'
-    }
-  }
+      '@angular-eslint/template/prefer-built-in-pipes': 'error',
+    },
+  },
 );

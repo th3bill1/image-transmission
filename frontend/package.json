@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "format": "prettier --write ."
   },
   "private": true,
   "packageManager": "npm@11.20.0",
@@ -20,6 +21,7 @@
     "@angular/router": "^22.2.0",
     "@stylistic/eslint-plugin-js": "^4.4.1",
     "@tailwindcss/postcss": "^4.3.3",
+    "i18n": "^0.15.4",
     "postcss": "^8.5.32",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.3.3",
