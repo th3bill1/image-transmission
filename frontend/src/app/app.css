@@ -1,17 +1,17 @@
 app-root {
-  --ink: #12201c;
-  --muted: #64736d;
-  --line: #dce8e2;
+  --ink: #211a2d;
+  --muted: #756b86;
+  --line: #e5def0;
   --surface: #ffffff;
-  --page: #f5faf7;
-  --field: #f7fbf9;
-  --dropzone: #f4f9f6;
-  --dropzone-image: #e5eee9;
-  --accent: #c9ef5b;
-  --accent-strong: #8dbb35;
-  --accent-dark: #355414;
-  --button-background: #eef5f1;
-  --shadow: 0 24px 70px rgba(27, 73, 53, 0.1);
+  --page: #faf8ff;
+  --field: #f8f5fc;
+  --dropzone: #f7f3fb;
+  --dropzone-image: #ece5f6;
+  --accent: #c4a7ff;
+  --accent-strong: #8b5cf6;
+  --accent-dark: #5b21b6;
+  --button-background: #f0eafe;
+  --shadow: 0 24px 70px rgba(73, 43, 122, 0.12);
   color-scheme: light;
   background:
     radial-gradient(
@@ -21,7 +21,7 @@ app-root {
     ),
     radial-gradient(
       circle at 100% 30%,
-      color-mix(in srgb, #7bdcc4 10%, transparent),
+      color-mix(in srgb, #c4a7ff 12%, transparent),
       transparent 24rem
     ),
     var(--page);
@@ -34,23 +34,23 @@ app-root {
 }
 
 app-root.dark-theme {
-  --ink: #edf7f0;
-  --muted: #9aac9f;
-  --line: #30453b;
-  --surface: #18251f;
-  --page: #0c1511;
-  --field: #203229;
-  --dropzone: #1b2b23;
-  --dropzone-image: #2b4035;
-  --accent-dark: #d7f58c;
-  --button-background: #263a30;
+  --ink: #f4efff;
+  --muted: #b7accb;
+  --line: #493d5b;
+  --surface: #211a2b;
+  --page: #120d19;
+  --field: #2a2136;
+  --dropzone: #251d31;
+  --dropzone-image: #392c49;
+  --accent-dark: #d8c5ff;
+  --button-background: #342747;
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
   color-scheme: dark;
 }
 
 html,
 body {
-  background: var(--page, #f5faf7);
+  background: var(--page, #faf8ff);
   margin: 0;
   min-height: 100%;
 }
@@ -199,7 +199,7 @@ h2 {
   align-items: center;
   aspect-ratio: 1.35;
   background: var(--dropzone);
-  border: 1px dashed #b5c9be;
+  border: 1px dashed #d1c5df;
   border-radius: 1rem;
   display: flex;
   justify-content: center;
@@ -357,7 +357,7 @@ app-root.dark-theme .upload-icon {
 }
 .status-dot,
 .ready-indicator {
-  background: #72a03b;
+  background: #8b5cf6;
   border-radius: 50%;
   flex: 0 0 auto;
   height: 0.5rem;
@@ -547,15 +547,15 @@ input[type='number']::-webkit-outer-spin-button {
   background: #b7c1bc;
 }
 .ready-indicator.ready {
-  background: #72a03b;
-  box-shadow: 0 0 0 4px color-mix(in srgb, #72a03b 18%, transparent);
+  background: #8b5cf6;
+  box-shadow: 0 0 0 4px color-mix(in srgb, #8b5cf6 18%, transparent);
 }
 .primary-button {
   align-items: center;
   background: var(--accent);
   border: 0;
   border-radius: 0.7rem;
-  color: #24350f;
+  color: #2f1a55;
   cursor: pointer;
   display: inline-flex;
   font-size: 0.78rem;
@@ -568,7 +568,7 @@ input[type='number']::-webkit-outer-spin-button {
     transform 160ms ease;
 }
 .primary-button:hover:not(:disabled) {
-  background: #d7f982;
+  background: #d5c1ff;
   box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 35%, transparent);
   transform: translateY(-2px);
 }

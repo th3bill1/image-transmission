@@ -9,8 +9,8 @@
   <div class="control-group">
     <span class="control-label" id="codec-label">{{ translation.translate('simulation.codec') }}</span>
     <details
-      class="select-menu"
       #codecMenu
+      class="select-menu"
       (toggle)="closeOtherMenu(codecMenu, noiseMenu)"
     >
       <summary aria-labelledby="codec-label">
@@ -37,8 +37,8 @@
   <div class="control-group">
     <span class="control-label" id="noise-model-label">{{ translation.translate('simulation.noise') }}</span>
     <details
-      class="select-menu"
       #noiseMenu
+      class="select-menu"
       (toggle)="closeOtherMenu(noiseMenu, codecMenu)"
     >
       <summary aria-labelledby="noise-model-label">

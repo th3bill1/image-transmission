@@ -16,7 +16,7 @@
     <p class="flow-text">{{ translation.translate('flow.resultsText') }}</p>
 
     <div class="result-preview">
-      @if (previewUrl(); as preview) {
+      @if (result()?.decodedImageUrl; as preview) {
         <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -->
         <img [src]="preview" [alt]="translation.translate('flow.receivedImage')" />
       }
@@ -25,19 +25,19 @@
 
     <div class="result-grid">
       <div class="result-card">
-        <strong><svg lucideCheck aria-hidden="true" size="16"></svg>7</strong>
-        <span>{{ translation.translate('flow.bitErrors') }}</span>
-        <small>{{ translation.translate('flow.mockValue') }}</small>
+        <strong><svg lucideCheck aria-hidden="true" size="16"></svg>{{ result()?.metrics?.transmittedBitCount }}</strong>
+        <span>{{ translation.translate('flow.transmittedBits') }}</span>
+        <small>{{ translation.translate('flow.fromApi') }}</small>
       </div>
       <div class="result-card">
-        <strong><svg lucideShieldCheck aria-hidden="true" size="16"></svg>7</strong>
-        <span>{{ translation.translate('flow.correctedErrors') }}</span>
-        <small>{{ translation.translate('flow.mockValue') }}</small>
+        <strong><svg lucideShieldCheck aria-hidden="true" size="16"></svg>{{ result()?.metrics?.redundantBitCount }}</strong>
+        <span>{{ translation.translate('flow.redundantBits') }}</span>
+        <small>{{ translation.translate('flow.fromApi') }}</small>
       </div>
       <div class="result-card">
-        <strong>98.6%</strong>
-        <span>{{ translation.translate('flow.signalQuality') }}</span>
-        <small>{{ translation.translate('flow.mockValue') }}</small>
+        <strong>{{ result()?.metrics?.incorrectPixelPercentage | number: '1.0-2' }}%</strong>
+        <span>{{ translation.translate('flow.pixelError') }}</span>
+        <small>{{ translation.translate('flow.fromApi') }}</small>
       </div>
     </div>
 
@@ -80,7 +80,14 @@
     <div class="image-comparison">
       @for (label of ['summary.original', 'summary.errors', 'summary.recovered']; track label) {
         <figure class="comparison-card">
-          @if (label === 'summary.original' ? originalPreviewUrl() : previewUrl(); as preview) {
+          @if (
+            label === 'summary.original'
+              ? originalPreviewUrl()
+              : label === 'summary.errors'
+                ? result()?.uncorrectedImageUrl
+                : result()?.decodedImageUrl;
+            as preview
+          ) {
             <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -->
             <img [src]="preview" [alt]="translation.translate(label)" />
           }

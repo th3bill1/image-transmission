@@ -52,15 +52,11 @@ export class SimulationControls {
   }
 
   protected noiseModelLabel(): string {
-    return this.translation.translate(
-      this.noiseModel() === 'burst' ? 'simulation.burst' : 'simulation.independent'
-    );
+    const key = this.noiseModel() === 'burst' ? 'simulation.burst' : 'simulation.independent';
+    return this.translation.translate(key);
   }
 
-  protected closeOtherMenu(
-    openedMenu: HTMLDetailsElement,
-    otherMenu: HTMLDetailsElement
-  ): void {
+  protected closeOtherMenu(openedMenu: HTMLDetailsElement, otherMenu: HTMLDetailsElement): void {
     if (openedMenu.open) otherMenu.open = false;
   }
 }

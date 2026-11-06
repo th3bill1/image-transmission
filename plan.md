@@ -12,9 +12,9 @@ This is not the final version of work division.
 - [x] Configure Angular, Tailwind, ESLint, and Aspire frontend/API startup.
 - [x] Create image upload and original-image preview.
 - [x] Create initial codec selection and simulation controls.
-- [ ] Connect the frontend to the initial simulation API.
-- [ ] Implement loading, validation, and API error states.
-- [ ] Integrate the complete simulation workflow into the frontend.
+- [x] Connect the frontend to the initial simulation API.
+- [x] Implement loading, validation, and API error states.
+- [x] Integrate the complete simulation workflow into the frontend.
 - [ ] Demonstrate the working application during KM1.
 
 ### Ola — Image processing and backend
