@@ -69,5 +69,18 @@
   "flow.signalQuality": "Signal quality",
   "flow.mockValue": "Preview value",
   "flow.runAgain": "Run another simulation",
-  "flow.backToSetup": "Back to setup"
+  "flow.backToSetup": "Back to setup",
+  "flow.viewSummary": "View summary",
+  "summary.section": "04 / Summary",
+  "summary.heading": "Transmission summary",
+  "summary.text": "Review the selected parameters and image states from this transmission.",
+  "summary.codec": "Codec",
+  "summary.noiseModel": "Noise model",
+  "summary.errorProbability": "Bit-error probability",
+  "summary.burst": "Burst length / count",
+  "summary.seed": "Random seed",
+  "summary.notSet": "Not set",
+  "summary.original": "Original image",
+  "summary.errors": "Image with errors",
+  "summary.recovered": "Image after recovery"
 }

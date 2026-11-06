@@ -31,6 +31,8 @@ export class App implements OnDestroy {
 
   protected readonly previewUrl = signal<string | null>(null);
 
+  protected readonly originalPreviewUrl = signal<string | null>(null);
+
   protected readonly isUploading = signal(false);
 
   protected readonly imageDimensions = signal('');
@@ -100,7 +102,9 @@ export class App implements OnDestroy {
       return;
     }
     if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
+    if (this.originalPreviewUrl()) URL.revokeObjectURL(this.originalPreviewUrl()!);
     this.selectedFile.set(file);
+    this.originalPreviewUrl.set(URL.createObjectURL(file));
     this.previewUrl.set(null);
     this.isUploading.set(true);
     try {
@@ -120,7 +124,9 @@ export class App implements OnDestroy {
 
   protected clearImage(): void {
     if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
+    if (this.originalPreviewUrl()) URL.revokeObjectURL(this.originalPreviewUrl()!);
     this.selectedFile.set(null);
+    this.originalPreviewUrl.set(null);
     this.previewUrl.set(null);
     this.isUploading.set(false);
     this.imageDimensions.set('');
@@ -137,6 +143,10 @@ export class App implements OnDestroy {
     }, 1200);
   }
 
+  protected showSummary(): void {
+    this.simulationPhase.set('summary');
+  }
+
   protected resetSimulation(): void {
     this.simulationPhase.set(null);
   }
@@ -144,5 +154,6 @@ export class App implements OnDestroy {
   public ngOnDestroy(): void {
     if (this.simulationTimer) clearTimeout(this.simulationTimer);
     if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
+    if (this.originalPreviewUrl()) URL.revokeObjectURL(this.originalPreviewUrl()!);
   }
 }

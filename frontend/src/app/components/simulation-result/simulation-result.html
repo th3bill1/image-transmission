@@ -8,7 +8,7 @@
     <p class="flow-text">{{ translation.translate('flow.processingText') }}</p>
     <p class="flow-note">{{ translation.translate('flow.processingNote') }}</p>
   </section>
-} @else {
+} @else if (phase() === 'results') {
   <section class="flow-screen panel" aria-labelledby="results-heading">
     <p class="section-kicker">{{ translation.translate('flow.resultsSection') }}</p>
     <h2 id="results-heading">{{ translation.translate('flow.resultsHeading') }}</h2>
@@ -38,6 +38,54 @@
         <span>{{ translation.translate('flow.signalQuality') }}</span>
         <small>{{ translation.translate('flow.mockValue') }}</small>
       </div>
+    </div>
+
+    <button class="primary-button flow-action" type="button" (click)="summary.emit()">
+      {{ translation.translate('flow.viewSummary') }}
+      <span aria-hidden="true">→</span>
+    </button>
+  </section>
+} @else {
+  <section class="flow-screen panel summary-screen" aria-labelledby="summary-heading">
+    <p class="section-kicker">{{ translation.translate('summary.section') }}</p>
+    <h2 id="summary-heading">{{ translation.translate('summary.heading') }}</h2>
+    <p class="flow-text">{{ translation.translate('summary.text') }}</p>
+
+    @if (parameters(); as settings) {
+      <div class="summary-parameters">
+        <div class="summary-parameter">
+          <span>{{ translation.translate('summary.codec') }}</span>
+          <strong>{{ settings.codec }}</strong>
+        </div>
+        <div class="summary-parameter">
+          <span>{{ translation.translate('summary.noiseModel') }}</span>
+          <strong>{{ settings.noiseModel }}</strong>
+        </div>
+        <div class="summary-parameter">
+          <span>{{ translation.translate('summary.errorProbability') }}</span>
+          <strong>{{ settings.errorProbability }}</strong>
+        </div>
+        <div class="summary-parameter">
+          <span>{{ translation.translate('summary.burst') }}</span>
+          <strong>{{ settings.burstLength }} / {{ settings.burstCount }}</strong>
+        </div>
+        <div class="summary-parameter">
+          <span>{{ translation.translate('summary.seed') }}</span>
+          <strong>{{ settings.randomSeed ?? translation.translate('summary.notSet') }}</strong>
+        </div>
+      </div>
+    }
+
+    <div class="image-comparison">
+      @for (label of ['summary.original', 'summary.errors', 'summary.recovered']; track label) {
+        <figure class="comparison-card">
+          @if ((label === 'summary.original' ? originalPreviewUrl() : previewUrl()); as preview) {
+            <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -->
+            <img [src]="preview" [alt]="translation.translate(label)" />
+          }
+          <figcaption>{{ translation.translate(label) }}</figcaption>
+        </figure>
+      }
     </div>
 
     <button class="primary-button flow-action" type="button" (click)="restart.emit()">

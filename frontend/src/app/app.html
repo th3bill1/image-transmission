@@ -9,6 +9,16 @@
     <app-simulation-result
       [phase]="phase"
       [previewUrl]="previewUrl()"
+      [originalPreviewUrl]="originalPreviewUrl()"
+      [parameters]="{
+        codec: codec,
+        noiseModel: noiseModel,
+        errorProbability: errorProbability,
+        burstLength: burstLength,
+        burstCount: burstCount,
+        randomSeed: randomSeed
+      }"
+      (summary)="showSummary()"
       (restart)="resetSimulation()"
     />
   } @else {

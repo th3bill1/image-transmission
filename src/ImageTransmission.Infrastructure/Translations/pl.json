@@ -69,5 +69,18 @@
   "flow.signalQuality": "Jakość sygnału",
   "flow.mockValue": "Wartość podglądowa",
   "flow.runAgain": "Uruchom kolejną symulację",
-  "flow.backToSetup": "Wróć do konfiguracji"
+  "flow.backToSetup": "Wróć do konfiguracji",
+  "flow.viewSummary": "Pokaż podsumowanie",
+  "summary.section": "04 / Podsumowanie",
+  "summary.heading": "Podsumowanie transmisji",
+  "summary.text": "Przejrzyj wybrane parametry i stany obrazu z tej transmisji.",
+  "summary.codec": "Kod",
+  "summary.noiseModel": "Model zakłóceń",
+  "summary.errorProbability": "Prawdopodobieństwo błędu bitu",
+  "summary.burst": "Długość / liczba skupień",
+  "summary.seed": "Ziarno losowe",
+  "summary.notSet": "Nie ustawiono",
+  "summary.original": "Obraz oryginalny",
+  "summary.errors": "Obraz z błędami",
+  "summary.recovered": "Obraz po odzyskaniu"
 }

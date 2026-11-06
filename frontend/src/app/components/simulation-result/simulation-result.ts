@@ -1,7 +1,16 @@
 import { Component, inject, input, output } from '@angular/core';
 import { TranslationService } from '../../services/translation-service/translation.service';
 
-export type SimulationPhase = 'processing' | 'results';
+export type SimulationPhase = 'processing' | 'results' | 'summary';
+
+export interface SimulationParameters {
+  codec: string;
+  noiseModel: string;
+  errorProbability: number;
+  burstLength: number;
+  burstCount: number;
+  randomSeed: number | null;
+}
 
 @Component({
   selector: 'app-simulation-result',
@@ -14,5 +23,11 @@ export class SimulationResult {
 
   readonly previewUrl = input<string | null>(null);
 
+  readonly originalPreviewUrl = input<string | null>(null);
+
+  readonly parameters = input<SimulationParameters | null>(null);
+
   readonly restart = output<void>();
+
+  readonly summary = output<void>();
 }
