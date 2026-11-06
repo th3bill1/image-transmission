@@ -25,7 +25,7 @@ export class App implements OnDestroy {
 
   private readonly imageService = inject(ImageService);
 
-  isDarkMode = false;
+  isDarkMode = true;
 
   protected readonly selectedFile = signal<File | null>(null);
 

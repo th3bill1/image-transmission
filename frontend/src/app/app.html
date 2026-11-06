@@ -16,37 +16,37 @@
         errorProbability: errorProbability,
         burstLength: burstLength,
         burstCount: burstCount,
-        randomSeed: randomSeed
+        randomSeed: randomSeed,
       }"
       (summary)="showSummary()"
       (restart)="resetSimulation()"
     />
   } @else {
     <div class="workspace">
-    <app-image-upload
-      [selectedFile]="selectedFile()"
-      [previewUrl]="previewUrl()"
-      [isUploading]="isUploading()"
-      [imageDimensions]="imageDimensions()"
-      [uploadError]="uploadError()"
-      (fileSelected)="loadImage($event)"
-      (imageDropped)="loadImage($event)"
-      (imageCleared)="clearImage()"
-    />
+      <app-image-upload
+        [selectedFile]="selectedFile()"
+        [previewUrl]="previewUrl()"
+        [isUploading]="isUploading()"
+        [imageDimensions]="imageDimensions()"
+        [uploadError]="uploadError()"
+        (fileSelected)="loadImage($event)"
+        (imageDropped)="loadImage($event)"
+        (imageCleared)="clearImage()"
+      />
 
-    <app-simulation-controls
-      [previewUrl]="previewUrl()"
-      [codecOptions]="codecOptions"
-      [selectedCodecDescription]="selectedCodecDescription"
-      [simulationMessage]="simulationMessage()"
-      [(codec)]="codec"
-      [(noiseModel)]="noiseModel"
-      [(errorProbability)]="errorProbability"
-      [(burstLength)]="burstLength"
-      [(burstCount)]="burstCount"
-      [(randomSeed)]="randomSeed"
-      (simulationStarted)="startSimulation()"
-    />
+      <app-simulation-controls
+        [previewUrl]="previewUrl()"
+        [codecOptions]="codecOptions"
+        [selectedCodecDescription]="selectedCodecDescription"
+        [simulationMessage]="simulationMessage()"
+        [(codec)]="codec"
+        [(noiseModel)]="noiseModel"
+        [(errorProbability)]="errorProbability"
+        [(burstLength)]="burstLength"
+        [(burstCount)]="burstCount"
+        [(randomSeed)]="randomSeed"
+        (simulationStarted)="startSimulation()"
+      />
     </div>
   }
 </main>

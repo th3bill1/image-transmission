@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
+import { LucideCloudUpload, LucideImage } from '@lucide/angular';
 import { TranslationService } from '../../services/translation-service/translation.service';
 
 @Component({
-  imports: [CommonModule],
+  imports: [CommonModule, LucideImage, LucideCloudUpload],
   selector: 'app-image-upload',
   templateUrl: './image-upload.html'
 })

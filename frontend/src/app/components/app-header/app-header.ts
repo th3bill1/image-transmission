@@ -1,7 +1,9 @@
 import { Component, inject, input, output } from '@angular/core';
+import { LucideLanguages, LucideMoon, LucideSun } from '@lucide/angular';
 import { TranslationService } from '../../services/translation-service/translation.service';
 
 @Component({
+  imports: [LucideLanguages, LucideMoon, LucideSun],
   selector: 'app-header',
   templateUrl: './app-header.html'
 })

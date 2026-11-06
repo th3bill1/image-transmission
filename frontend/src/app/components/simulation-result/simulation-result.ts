@@ -1,4 +1,5 @@
 import { Component, inject, input, output } from '@angular/core';
+import { LucideArrowRight, LucideCheck, LucideShieldCheck, LucideSparkles } from '@lucide/angular';
 import { TranslationService } from '../../services/translation-service/translation.service';
 
 export type SimulationPhase = 'processing' | 'results' | 'summary';
@@ -13,6 +14,7 @@ export interface SimulationParameters {
 }
 
 @Component({
+  imports: [LucideArrowRight, LucideCheck, LucideShieldCheck, LucideSparkles],
   selector: 'app-simulation-result',
   templateUrl: './simulation-result.html'
 })

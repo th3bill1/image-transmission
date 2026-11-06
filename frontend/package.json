@@ -19,6 +19,7 @@
     "@angular/forms": "^22.2.0",
     "@angular/platform-browser": "^22.2.0",
     "@angular/router": "^22.2.0",
+    "@lucide/angular": "^1.70.0",
     "@stylistic/eslint-plugin-js": "^4.4.1",
     "@tailwindcss/postcss": "^4.3.3",
     "i18n": "^0.15.4",

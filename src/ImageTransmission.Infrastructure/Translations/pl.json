@@ -1,8 +1,7 @@
 {
-  "app.eyebrow": "Transmisja obrazu",
   "app.subheading": "Kody korekcyjne - Projekt z zajęć na uczelni",
   "app.title": "Transmituj obraz przez zakłócenia",
-  "app.intro": "Prześlij obraz, wybierz kod korekcyjny i skonfiguruj kanał dla pierwszej symulacji.",
+  "app.intro": "Prześlij obraz, wybierz kod korekcyjny i skonfiguruj kanał dla symulacji.",
   "app.step": "Krok {{step}} z 3",
   "app.switchTheme": "Przełącz na tryb ciemny",
   "app.switchLanguage": "Switch to English",

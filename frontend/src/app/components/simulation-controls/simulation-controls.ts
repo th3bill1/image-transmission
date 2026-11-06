@@ -1,5 +1,6 @@
 import { Component, inject, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LucideArrowRight, LucideSlidersHorizontal } from '@lucide/angular';
 import { TranslationService } from '../../services/translation-service/translation.service';
 
 export interface CodecOption {
@@ -9,7 +10,7 @@ export interface CodecOption {
 }
 
 @Component({
-  imports: [FormsModule],
+  imports: [FormsModule, LucideArrowRight, LucideSlidersHorizontal],
   selector: 'app-simulation-controls',
   templateUrl: './simulation-controls.html'
 })
@@ -37,4 +38,29 @@ export class SimulationControls {
   readonly simulationMessage = input('');
 
   readonly simulationStarted = output<void>();
+
+  protected selectCodec(value: string): void {
+    this.codec.set(value);
+  }
+
+  protected selectNoiseModel(value: string): void {
+    this.noiseModel.set(value);
+  }
+
+  protected codecLabel(): string {
+    return this.codecOptions().find(option => option.value === this.codec())?.label ?? '';
+  }
+
+  protected noiseModelLabel(): string {
+    return this.translation.translate(
+      this.noiseModel() === 'burst' ? 'simulation.burst' : 'simulation.independent'
+    );
+  }
+
+  protected closeOtherMenu(
+    openedMenu: HTMLDetailsElement,
+    otherMenu: HTMLDetailsElement
+  ): void {
+    if (openedMenu.open) otherMenu.open = false;
+  }
 }

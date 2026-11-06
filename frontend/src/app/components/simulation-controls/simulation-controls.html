@@ -7,21 +7,65 @@
   </div>
 
   <div class="control-group">
-    <label for="codec">{{ translation.translate('simulation.codec') }}</label>
-    <select id="codec" [ngModel]="codec()" (ngModelChange)="codec.set($event)">
-      @for (option of codecOptions(); track option.value) {
-        <option [value]="option.value">{{ option.label }}</option>
-      }
-    </select>
+    <span class="control-label" id="codec-label">{{ translation.translate('simulation.codec') }}</span>
+    <details
+      class="select-menu"
+      #codecMenu
+      (toggle)="closeOtherMenu(codecMenu, noiseMenu)"
+    >
+      <summary aria-labelledby="codec-label">
+        <span>{{ codecLabel() }}</span>
+        <span class="select-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="select-options" role="listbox" aria-labelledby="codec-label">
+        @for (option of codecOptions(); track option.value) {
+          <button
+            type="button"
+            role="option"
+            [attr.aria-selected]="codec() === option.value"
+            [class.selected]="codec() === option.value"
+            (click)="selectCodec(option.value); codecMenu.open = false"
+          >
+            {{ option.label }}
+          </button>
+        }
+      </div>
+    </details>
     <p class="control-hint">{{ selectedCodecDescription() }}</p>
   </div>
 
   <div class="control-group">
-    <label for="noise-model">{{ translation.translate('simulation.noise') }}</label>
-    <select id="noise-model" [ngModel]="noiseModel()" (ngModelChange)="noiseModel.set($event)">
-      <option value="independent">{{ translation.translate('simulation.independent') }}</option>
-      <option value="burst">{{ translation.translate('simulation.burst') }}</option>
-    </select>
+    <span class="control-label" id="noise-model-label">{{ translation.translate('simulation.noise') }}</span>
+    <details
+      class="select-menu"
+      #noiseMenu
+      (toggle)="closeOtherMenu(noiseMenu, codecMenu)"
+    >
+      <summary aria-labelledby="noise-model-label">
+        <span>{{ noiseModelLabel() }}</span>
+        <span class="select-chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="select-options" role="listbox" aria-labelledby="noise-model-label">
+        <button
+          type="button"
+          role="option"
+          [attr.aria-selected]="noiseModel() === 'independent'"
+          [class.selected]="noiseModel() === 'independent'"
+          (click)="selectNoiseModel('independent'); noiseMenu.open = false"
+        >
+          {{ translation.translate('simulation.independent') }}
+        </button>
+        <button
+          type="button"
+          role="option"
+          [attr.aria-selected]="noiseModel() === 'burst'"
+          [class.selected]="noiseModel() === 'burst'"
+          (click)="selectNoiseModel('burst'); noiseMenu.open = false"
+        >
+          {{ translation.translate('simulation.burst') }}
+        </button>
+      </div>
+    </details>
   </div>
 
   <div class="control-grid">
@@ -80,6 +124,9 @@
 
   <div class="control-footer">
     <div>
+      <span class="footer-icon" aria-hidden="true"
+        ><svg lucideSlidersHorizontal size="16"></svg
+      ></span>
       <span class="ready-indicator" [class.ready]="previewUrl()"></span>
       <span>{{
         translation.translate(previewUrl() ? 'simulation.ready' : 'simulation.uploadRequired')
@@ -92,7 +139,7 @@
       (click)="simulationStarted.emit()"
     >
       {{ translation.translate('simulation.submit') }}
-      <span aria-hidden="true">{{ translation.translate('simulation.submitIcon') }}</span>
+      <svg lucideArrowRight aria-hidden="true" size="17"></svg>
     </button>
   </div>
   <p class="simulation-message" role="status" [hidden]="!simulationMessage()">

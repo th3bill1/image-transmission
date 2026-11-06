@@ -2,7 +2,8 @@
   <section class="flow-screen panel" aria-labelledby="processing-heading">
     <p class="section-kicker">{{ translation.translate('flow.processingSection') }}</p>
     <div class="processing-visual" aria-hidden="true">
-      <span></span><span></span><span></span>
+      <span><svg lucideSparkles size="18"></svg></span><span></span
+      ><span><svg lucideSparkles size="18"></svg></span>
     </div>
     <h2 id="processing-heading">{{ translation.translate('flow.processingHeading') }}</h2>
     <p class="flow-text">{{ translation.translate('flow.processingText') }}</p>
@@ -24,12 +25,12 @@
 
     <div class="result-grid">
       <div class="result-card">
-        <strong>7</strong>
+        <strong><svg lucideCheck aria-hidden="true" size="16"></svg>7</strong>
         <span>{{ translation.translate('flow.bitErrors') }}</span>
         <small>{{ translation.translate('flow.mockValue') }}</small>
       </div>
       <div class="result-card">
-        <strong>7</strong>
+        <strong><svg lucideShieldCheck aria-hidden="true" size="16"></svg>7</strong>
         <span>{{ translation.translate('flow.correctedErrors') }}</span>
         <small>{{ translation.translate('flow.mockValue') }}</small>
       </div>
@@ -42,7 +43,7 @@
 
     <button class="primary-button flow-action" type="button" (click)="summary.emit()">
       {{ translation.translate('flow.viewSummary') }}
-      <span aria-hidden="true">→</span>
+      <svg lucideArrowRight aria-hidden="true" size="17"></svg>
     </button>
   </section>
 } @else {
@@ -79,7 +80,7 @@
     <div class="image-comparison">
       @for (label of ['summary.original', 'summary.errors', 'summary.recovered']; track label) {
         <figure class="comparison-card">
-          @if ((label === 'summary.original' ? originalPreviewUrl() : previewUrl()); as preview) {
+          @if (label === 'summary.original' ? originalPreviewUrl() : previewUrl(); as preview) {
             <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -->
             <img [src]="preview" [alt]="translation.translate(label)" />
           }
@@ -90,7 +91,7 @@
 
     <button class="primary-button flow-action" type="button" (click)="restart.emit()">
       {{ translation.translate('flow.runAgain') }}
-      <span aria-hidden="true">→</span>
+      <svg lucideArrowRight aria-hidden="true" size="17"></svg>
     </button>
   </section>
 }
