@@ -9,6 +9,8 @@ app-root {
   --dropzone-image: #dfe5e2;
   --accent: #c9ef5b;
   --accent-dark: #4c641a;
+  --file-type-muted: #edf5e0;
+  --button-background: #f0f5f2;
   background: var(--page);
   display: block;
   min-height: 100dvh;
@@ -26,6 +28,8 @@ app-root.dark-theme {
   --dropzone: #202e29;
   --dropzone-image: #31413b;
   --accent-dark: #d6f58b;
+  --file-type-muted: #1d4034;
+  --button-background: #2c3a34;
 }
 
 html,
@@ -156,7 +160,7 @@ h2 {
   letter-spacing: -0.035em;
 }
 .file-type {
-  background: #edf5e0;
+  background: var(--file-type-muted);
   border-radius: 999px;
   color: var(--accent-dark);
   font-size: 0.68rem;
@@ -245,8 +249,15 @@ h2 {
   font-size: 0.78rem;
 }
 .upload-button {
-  background: var(--ink);
+  background: var(--button-background);
   border-radius: 0.5rem;
+  border: 1px solid var(--line);
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+  &:hover {
+    background: color-mix(in srgb, var(--accent) 8%, var(--button-background));
+  }
   bottom: 1rem;
   color: #fff;
   cursor: pointer;
@@ -435,7 +446,13 @@ input:not([type='file']):focus {
   background: #72a03b;
 }
 .primary-button {
-  background: var(--accent);
+  background: var(--button-background);
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+  &:hover {
+    background: color-mix(in srgb, var(--accent) 8%, var(--button-background));
+  }
   border: 0;
   border-radius: 0.5rem;
   color: var(--accent-dark);
@@ -448,9 +465,6 @@ input:not([type='file']):focus {
   background: #e3e9e5;
   color: #8c9993;
   cursor: not-allowed;
-}
-.primary-button:not(:disabled):hover {
-  background: #b9e642;
 }
 .simulation-message {
   background: color-mix(in srgb, var(--accent) 15%, var(--surface));

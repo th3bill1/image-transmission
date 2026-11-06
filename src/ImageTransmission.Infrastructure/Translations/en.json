@@ -15,7 +15,7 @@
   "image.uploadedAlt": "Uploaded original image",
   "image.dimensions": "{{width}} × {{height}}px",
   "image.original": "Original image",
-  "image.grayscale": "Displayed in grayscale for transmission",
+  "image.grayscale": "Displayed in grayscale",
   "image.drop": "Drop an image here",
   "image.dragActive": "Release to upload the image",
   "image.formats": "PNG, JPEG, GIF, or WebP up to 10 MB",
