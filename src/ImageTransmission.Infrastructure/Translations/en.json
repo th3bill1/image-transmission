@@ -1,7 +1,6 @@
 {
   "app.subheading": "Error-correcting codes - University course project",
   "app.title": "Transmit an image through noise",
-  "app.intro": "Upload an image, choose an error-correcting code, and configure the channel for simulation.",
   "app.step": "Step {{step}} of 3",
   "app.switchTheme": "Switch to dark mode",
   "app.switchLanguage": "Przełącz na język polski",

@@ -118,12 +118,6 @@ h1 {
   line-height: 0.92;
   max-width: 760px;
 }
-.intro {
-  color: var(--muted);
-  line-height: 1.65;
-  margin-top: 1.35rem;
-  max-width: 540px;
-}
 .header-actions {
   align-items: center;
   display: flex;
@@ -796,6 +790,56 @@ input[type='number']::-webkit-outer-spin-button {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+@media (min-width: 801px) {
+  .app-shell {
+    padding-bottom: clamp(0.25rem, 1vh, 1rem);
+    padding-top: clamp(1.25rem, 4vh, 5.5rem);
+  }
+
+  .app-header {
+    margin-bottom: clamp(1.5rem, 4vh, 4rem);
+  }
+
+  h1 {
+    font-size: clamp(2.6rem, 6vh, 5.8rem);
+  }
+
+  .panel {
+    padding: clamp(1.15rem, 3vh, 1.75rem);
+  }
+
+  .panel-heading {
+    margin-bottom: clamp(1rem, 2vh, 1.3rem);
+  }
+
+  .dropzone {
+    aspect-ratio: 1.35;
+  }
+
+  .file-summary {
+    margin-top: 0.8rem;
+  }
+
+  .result-preview {
+    height: clamp(180px, 22vh, 240px);
+    margin: 1.5rem auto;
+  }
+
+  .result-preview img {
+    max-height: 100%;
+  }
+
+  .result-grid,
+  .summary-parameters {
+    margin: 1.5rem 0;
+  }
+
+  .comparison-card img {
+    height: clamp(140px, 18vh, 200px);
+  }
+}
+
 @media (max-width: 520px) {
   .header-actions {
     flex-wrap: wrap;
