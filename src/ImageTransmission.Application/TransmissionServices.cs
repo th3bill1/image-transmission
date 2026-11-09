@@ -13,10 +13,16 @@ public interface ISimulationService
 {
     Task<SimulationResult> RunAsync(
         SimulationRequest request,
+        Stream image,
         CancellationToken cancellationToken = default);
 
     Task<SimulationResult?> GetAsync(
         Guid id,
+        CancellationToken cancellationToken = default);
+
+    Task<(byte[] Content, string ContentType)?> GetImageAsync(
+        Guid id,
+        string variant,
         CancellationToken cancellationToken = default);
 }
 
@@ -38,7 +44,7 @@ public interface IExportService
         ExportRequest request,
         CancellationToken cancellationToken = default);
 
-    Task<byte[]?> DownloadAsync(
+    Task<ExportDownload?> DownloadAsync(
         Guid exportId,
         CancellationToken cancellationToken = default);
 }

@@ -63,6 +63,7 @@ public static class ApiEndpoints
                 return Results.BadRequest(new { error = "An image file is required." });
             }
 
+            await using var stream = image.OpenReadStream();
             var request = new SimulationRequest(
                 image.FileName,
                 image.ContentType,
@@ -75,7 +76,7 @@ public static class ApiEndpoints
                     ParseInt(form["burstCount"].ToString(), 0),
                     ParseNullableInt(form["randomSeed"].ToString())));
 
-            return Results.Ok(await simulations.RunAsync(request, cancellationToken));
+            return Results.Ok(await simulations.RunAsync(request, stream, cancellationToken));
         });
 
         api.MapGet("/simulations/{id:guid}", async (
@@ -85,6 +86,36 @@ public static class ApiEndpoints
         {
             var result = await simulations.GetAsync(id, cancellationToken);
             return result is null ? Results.NotFound() : Results.Ok(result);
+        });
+
+        api.MapGet("/simulations/{id:guid}/images/original", (Guid id, ISimulationService simulations, CancellationToken cancellationToken) =>
+            GetSimulationImage(id, "original", simulations, cancellationToken));
+
+        api.MapGet("/simulations/{id:guid}/images/uncorrected", (Guid id, ISimulationService simulations, CancellationToken cancellationToken) =>
+            GetSimulationImage(id, "uncorrected", simulations, cancellationToken));
+
+        api.MapGet("/simulations/{id:guid}/images/decoded", (Guid id, ISimulationService simulations, CancellationToken cancellationToken) =>
+            GetSimulationImage(id, "decoded", simulations, cancellationToken));
+
+        api.MapGet("/simulations/{id:guid}/errors", async (
+            Guid id,
+            ISimulationService simulations,
+            CancellationToken cancellationToken) =>
+        {
+            var result = await simulations.GetAsync(id, cancellationToken);
+            return result is null ? Results.NotFound() : Results.Ok(result.ErrorRegions);
+        });
+
+        api.MapGet("/simulations/{id:guid}/images/{variant}", async (
+            Guid id,
+            string variant,
+            ISimulationService simulations,
+            CancellationToken cancellationToken) =>
+        {
+            var image = await simulations.GetImageAsync(id, variant, cancellationToken);
+            return image is null
+                ? Results.NotFound()
+                : Results.File(image.Value.Content, image.Value.ContentType);
         });
 
         api.MapPost("/experiments", async (
@@ -117,8 +148,20 @@ public static class ApiEndpoints
             var content = await exports.DownloadAsync(id, cancellationToken);
             return content is null
                 ? Results.NotFound()
-                : Results.File(content, "application/json", "simulation-export.json");
+                : Results.File(content.Content, content.ContentType, content.FileName);
         });
+    }
+
+    private static async Task<IResult> GetSimulationImage(
+        Guid id,
+        string variant,
+        ISimulationService simulations,
+        CancellationToken cancellationToken)
+    {
+        var image = await simulations.GetImageAsync(id, variant, cancellationToken);
+        return image is null
+            ? Results.NotFound()
+            : Results.File(image.Value.Content, image.Value.ContentType, $"{variant}.png");
     }
 
     private static int ParseInt(string value, int fallback) =>

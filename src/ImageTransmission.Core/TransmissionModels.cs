@@ -117,6 +117,11 @@ public sealed record ExportDescriptor(
     string ContentType = "application/json",
     string? FileName = null);
 
+public sealed record ExportDownload(
+    byte[] Content,
+    string ContentType,
+    string FileName);
+
 public sealed record ImageUploadResult(
     Guid Id,
     int Width,
