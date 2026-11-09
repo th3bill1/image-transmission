@@ -1,0 +1,79 @@
+<section class="panel upload-panel" aria-labelledby="image-heading">
+  <div class="panel-heading">
+    <div>
+      <p class="section-kicker">{{ translation.translate('image.section') }}</p>
+      <h2 id="image-heading">{{ translation.translate('image.heading') }}</h2>
+    </div>
+    @if (selectedFile(); as file) {
+      <span class="file-type">{{ file.type.split('/')[1] | uppercase }}</span>
+    }
+  </div>
+
+  <div
+    class="dropzone"
+    [class.has-image]="previewUrl()"
+    [class.drag-active]="isDragActive"
+    [attr.aria-busy]="isUploading()"
+    (dragenter)="onDragEnter($event)"
+    (dragover)="$event.preventDefault()"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+  >
+    @if (isDragActive) {
+      <div class="drag-overlay">
+        <span class="upload-icon" aria-hidden="true"><svg lucideCloudUpload size="24"></svg></span>
+        <strong>{{ translation.translate('image.dragActive') }}</strong>
+      </div>
+    } @else {
+      @if (isUploading()) {
+        <div class="upload-spinner" role="status">
+          <span class="spinner" aria-hidden="true"></span>
+          <span>{{ translation.translate('image.processing') }}</span>
+        </div>
+      } @else if (previewUrl(); as preview) {
+        <!-- eslint-disable @angular-eslint/template/prefer-ngsrc -->
+        <img
+          class="preview-image"
+          [src]="preview"
+          [alt]="translation.translate('image.uploadedAlt')"
+        />
+        <!-- eslint-enable @angular-eslint/template/prefer-ngsrc -->
+        <div class="preview-overlay">
+          <p>{{ translation.translate('image.original') }}</p>
+          <span>{{ translation.translate('image.grayscale') }}</span>
+        </div>
+      } @else {
+        <div class="upload-prompt">
+          <span class="upload-icon" aria-hidden="true"><svg lucideImage size="24"></svg></span>
+          <h3>{{ translation.translate('image.drop') }}</h3>
+          <p>{{ translation.translate('image.formats') }}</p>
+        </div>
+      }
+      <label class="upload-button" [class.disabled]="isUploading()">
+        {{ translation.translate(previewUrl() ? 'image.chooseDifferent' : 'image.browse') }}
+        <input
+          type="file"
+          accept="image/png,image/jpeg,image/gif,image/webp"
+          (change)="onFileSelected($event)"
+        />
+      </label>
+    }
+  </div>
+
+  @if (selectedFile(); as file) {
+    <div class="file-summary">
+      <span class="status-dot" aria-hidden="true"></span>
+      <div>
+        <strong>{{ file.name }}</strong>
+        <span>{{ formatFileSize(file.size) }} · {{ imageDimensions() }}</span>
+      </div>
+      <button class="text-button" type="button" (click)="imageCleared.emit()">
+        {{ translation.translate('image.remove') }}
+      </button>
+    </div>
+  }
+
+  @if (uploadError()) {
+    <p class="error-message" role="alert">{{ uploadError() }}</p>
+  }
+</section>

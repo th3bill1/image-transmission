@@ -1,0 +1,194 @@
+<!-- eslint-disable @angular-eslint/template/prefer-ngsrc -->
+<!-- eslint-disable @angular-eslint/template/no-inline-styles -->
+<!-- eslint-disable @angular-eslint/template/cyclomatic-complexity -->
+@if (phase() === 'processing') {
+  <section class="flow-screen panel" aria-labelledby="processing-heading">
+    <p class="section-kicker">{{ translation.translate('flow.processingSection') }}</p>
+    <div class="processing-visual" aria-hidden="true">
+      <span><svg lucideSparkles size="18"></svg></span><span></span
+      ><span><svg lucideSparkles size="18"></svg></span>
+    </div>
+    <h2 id="processing-heading">{{ translation.translate('flow.processingHeading') }}</h2>
+    <p class="flow-text">{{ translation.translate('flow.processingText') }}</p>
+  </section>
+} @else if (phase() === 'results') {
+  <section class="flow-screen panel" aria-labelledby="results-heading">
+    <p class="section-kicker">{{ translation.translate('flow.resultsSection') }}</p>
+    <h2 id="results-heading">{{ translation.translate('flow.resultsHeading') }}</h2>
+    <p class="flow-text">{{ translation.translate('flow.resultsText') }}</p>
+
+    <div class="image-comparison result-comparison">
+      @for (image of [
+        { url: result()?.originalImageUrl, label: 'summary.original' },
+        { url: result()?.uncorrectedImageUrl, label: 'summary.errors' },
+        { url: result()?.decodedImageUrl, label: 'summary.recovered' }
+      ]; track image.label) {
+        <figure class="comparison-card">
+          @if (image.url; as preview) {
+            <img [src]="preview" [alt]="translation.translate(image.label)" />
+          }
+          <figcaption>
+            <span>{{ translation.translate(image.label) }}</span>
+            <button
+              class="image-download-button"
+              type="button"
+              (click)="requestImageExport(
+                image.label === 'summary.original'
+                  ? 'original'
+                  : image.label === 'summary.errors'
+                    ? 'uncorrected'
+                    : 'decoded'
+              )"
+            >
+              <svg lucideDownload size="14"></svg>
+              {{ translation.translate('flow.downloadImage') }}
+            </button>
+          </figcaption>
+        </figure>
+      }
+    </div>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <strong><svg lucideCheck aria-hidden="true" size="16"></svg>{{ result()?.metrics?.transmittedBitCount }}</strong>
+        <span>{{ translation.translate('flow.transmittedBits') }}</span>
+        <small>{{ translation.translate('flow.fromApi') }}</small>
+      </div>
+      <div class="result-card">
+        <strong><svg lucideShieldCheck aria-hidden="true" size="16"></svg>{{ result()?.metrics?.redundantBitCount }}</strong>
+        <span>{{ translation.translate('flow.redundantBits') }}</span>
+        <small>{{ translation.translate('flow.fromApi') }}</small>
+      </div>
+      <div class="result-card">
+        <strong>{{ result()?.metrics?.incorrectPixelPercentage | number: '1.0-2' }}%</strong>
+        <span>{{ translation.translate('flow.pixelError') }}</span>
+        <small>{{ translation.translate('flow.fromApi') }}</small>
+      </div>
+      <div class="result-card">
+        <strong>{{ result()?.metrics?.codingOverheadPercentage | number: '1.0-2' }}%</strong>
+        <span>{{ translation.translate('flow.overhead') }}</span>
+      </div>
+      <div class="result-card">
+        <strong>{{ result()?.metrics?.meanAbsoluteBrightnessError | number: '1.0-2' }}</strong>
+        <span>{{ translation.translate('flow.brightnessError') }}</span>
+      </div>
+      <div class="result-card">
+        <strong>{{ result()?.metrics?.uncorrectableBlockCount }}</strong>
+        <span>{{ translation.translate('flow.uncorrectable') }}</span>
+      </div>
+    </div>
+
+    <section class="error-overlay-panel" aria-labelledby="error-overlay-heading">
+      <h3 class="error-overlay-heading" id="error-overlay-heading">
+        {{ translation.translate('flow.errorOverlay') }}
+      </h3>
+      <div class="overlay-preview">
+        @if (result()?.decodedImageUrl; as preview) {
+          <img [src]="preview" [alt]="translation.translate('flow.errorOverlay')" />
+          @for (region of result()?.errorRegions ?? []; track region.blockIndex) {
+            <span class="error-region" [class.corrected]="region.status === 'corrected'"
+              [style.left.%]="region.x / 4" [style.top.%]="region.y / 3"
+              [style.width.%]="region.width / 4" [style.height.%]="region.height / 3"
+              [attr.title]="region.status"></span>
+          }
+        }
+      </div>
+      <div class="error-legend">
+        <span><i class="legend-swatch uncorrectable"></i>{{ translation.translate('flow.uncorrectableLegend') }}</span>
+        <span><i class="legend-swatch corrected"></i>{{ translation.translate('flow.correctedLegend') }}</span>
+        <span><i class="legend-swatch undetected"></i>{{ translation.translate('flow.undetectedLegend') }}</span>
+      </div>
+    </section>
+
+    <button class="primary-button flow-action" type="button" (click)="summary.emit()">
+      {{ translation.translate('flow.viewSummary') }}
+      <svg lucideArrowRight aria-hidden="true" size="17"></svg>
+    </button>
+    <div class="flow-actions">
+      <button class="secondary-button" type="button" (click)="requestReportExport('json')">
+        <svg lucideDownload size="16"></svg> JSON
+      </button>
+      <button class="secondary-button" type="button" (click)="requestReportExport('csv')">
+        <svg lucideDownload size="16"></svg> CSV
+      </button>
+    </div>
+  </section>
+} @else {
+  <section class="flow-screen panel summary-screen" aria-labelledby="summary-heading">
+    <p class="section-kicker">{{ translation.translate('summary.section') }}</p>
+    <h2 id="summary-heading">{{ translation.translate('summary.heading') }}</h2>
+    <p class="flow-text">{{ translation.translate('summary.text') }}</p>
+
+    @if (parameters(); as settings) {
+      <div class="summary-parameters">
+        <div class="summary-parameter">
+          <span>{{ translation.translate('summary.codec') }}</span>
+          <strong>{{ settings.codec }}</strong>
+        </div>
+        <div class="summary-parameter">
+          <span>{{ translation.translate('summary.noiseModel') }}</span>
+          <strong>{{ settings.noiseModel }}</strong>
+        </div>
+        <div class="summary-parameter">
+          <span>{{ translation.translate('summary.errorProbability') }}</span>
+          <strong>{{ settings.errorProbability }}</strong>
+        </div>
+        <div class="summary-parameter">
+          <span>{{ translation.translate('summary.burst') }}</span>
+          <strong>{{ settings.burstLength }} / {{ settings.burstCount }}</strong>
+        </div>
+        <div class="summary-parameter">
+          <span>{{ translation.translate('summary.seed') }}</span>
+          <strong>{{ settings.randomSeed ?? translation.translate('summary.notSet') }}</strong>
+        </div>
+      </div>
+    }
+
+    <div class="image-comparison">
+      @for (label of ['summary.original', 'summary.errors', 'summary.recovered']; track label) {
+        <figure class="comparison-card">
+          @if (
+            label === 'summary.original'
+              ? originalPreviewUrl()
+              : label === 'summary.errors'
+                ? result()?.uncorrectedImageUrl
+                : result()?.decodedImageUrl;
+            as preview
+          ) {
+            <img [src]="preview" [alt]="translation.translate(label)" />
+          }
+          <figcaption>
+            <span>{{ translation.translate(label) }}</span>
+            <button
+              class="image-download-button"
+              type="button"
+              (click)="requestImageExport(
+                label === 'summary.original'
+                  ? 'original'
+                  : label === 'summary.errors'
+                    ? 'uncorrected'
+                    : 'decoded'
+              )"
+            >
+              <svg lucideDownload size="14"></svg>
+              {{ translation.translate('flow.downloadImage') }}
+            </button>
+          </figcaption>
+        </figure>
+      }
+    </div>
+
+    @if (result(); as simulation) {
+      <div class="result-grid summary-metrics">
+        <div class="result-card"><strong>{{ simulation.metrics.originalBitCount }}</strong><span>{{ translation.translate('flow.originalBits') }}</span></div>
+        <div class="result-card"><strong>{{ simulation.metrics.correctedBlockCount }}</strong><span>{{ translation.translate('flow.corrected') }}</span></div>
+        <div class="result-card"><strong>{{ simulation.metrics.uncorrectableBlockCount }}</strong><span>{{ translation.translate('flow.uncorrectable') }}</span></div>
+      </div>
+    }
+
+    <button class="primary-button flow-action" type="button" (click)="restart.emit()">
+      {{ translation.translate('flow.runAgain') }}
+      <svg lucideArrowRight aria-hidden="true" size="17"></svg>
+    </button>
+  </section>
+}
