@@ -35,7 +35,7 @@ public interface IExportService
 {
     Task<ExportDescriptor> CreateAsync(
         Guid simulationId,
-        string format,
+        ExportRequest request,
         CancellationToken cancellationToken = default);
 
     Task<byte[]?> DownloadAsync(

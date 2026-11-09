@@ -107,7 +107,7 @@ public static class ApiEndpoints
             ExportRequest request,
             IExportService exports,
             CancellationToken cancellationToken) =>
-            Results.Ok(await exports.CreateAsync(simulationId, request.Format, cancellationToken)));
+            Results.Ok(await exports.CreateAsync(simulationId, request, cancellationToken)));
 
         api.MapGet("/exports/{id:guid}/download", async (
             Guid id,
@@ -136,5 +136,4 @@ public static class ApiEndpoints
             ? parsed
             : fallback;
 
-    private sealed record ExportRequest(string Format);
 }

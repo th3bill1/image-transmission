@@ -49,6 +49,7 @@ public sealed class MockSimulationService : ISimulationService
             $"/api/simulations/{id}/images/uncorrected",
             $"/api/simulations/{id}/images/decoded",
             new(800, 1400, 600, 0, 0),
+            [],
             []);
     }
 }
@@ -61,7 +62,7 @@ public sealed class MockExperimentService : IExperimentService
         ExperimentRequest request,
         CancellationToken cancellationToken = default)
     {
-        var result = new ExperimentResult(Guid.NewGuid(), "mock", []);
+        var result = new ExperimentResult(Guid.NewGuid(), "mock", [], []);
         results[result.Id] = result;
         return Task.FromResult(result);
     }
@@ -78,13 +79,18 @@ public sealed class MockExportService : IExportService
 
     public Task<ExportDescriptor> CreateAsync(
         Guid simulationId,
-        string format,
+        ExportRequest request,
         CancellationToken cancellationToken = default)
     {
         var id = Guid.NewGuid();
         exports[id] = System.Text.Encoding.UTF8.GetBytes(
             $$"""{"status":"mock","simulationId":"{{simulationId}}"}""");
-        return Task.FromResult(new ExportDescriptor(id, format, $"/api/exports/{id}/download"));
+        return Task.FromResult(new ExportDescriptor(
+            id,
+            request.Format,
+            $"/api/exports/{id}/download",
+            request.Format == ExportFormats.Csv ? "text/csv" : "application/json",
+            $"simulation-{simulationId}.{request.Format}"));
     }
 
     public Task<byte[]?> DownloadAsync(

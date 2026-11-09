@@ -5,8 +5,10 @@ import {
   ExperimentRequest,
   ExperimentResult,
   ExportDescriptor,
+  ExportRequest,
   ImageUploadResult,
   NoiseModelDescriptor,
+  SimulationConfiguration,
   SimulationResult
 } from './web-api.models';
 
@@ -42,14 +44,7 @@ export class WebApiService {
 
   runSimulation(
     image: File,
-    configuration: {
-      codec: string;
-      noiseModel: string;
-      errorProbability: number;
-      burstLength: number;
-      burstCount: number;
-      randomSeed: number | null;
-    }
+    configuration: SimulationConfiguration
   ) {
     const form = new FormData();
     form.append('image', image);
@@ -76,10 +71,10 @@ export class WebApiService {
     return this.http.get<ExperimentResult>(`${this.baseUrl}/experiments/${id}`);
   }
 
-  createExport(simulationId: string, format: string) {
+  createExport(simulationId: string, request: ExportRequest) {
     return this.http.post<ExportDescriptor>(
       `${this.baseUrl}/simulations/${simulationId}/exports`,
-      { format }
+      request
     );
   }
 
