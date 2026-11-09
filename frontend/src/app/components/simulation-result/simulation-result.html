@@ -1,3 +1,6 @@
+<!-- eslint-disable @angular-eslint/template/prefer-ngsrc -->
+<!-- eslint-disable @angular-eslint/template/no-inline-styles -->
+<!-- eslint-disable @angular-eslint/template/cyclomatic-complexity -->
 @if (phase() === 'processing') {
   <section class="flow-screen panel" aria-labelledby="processing-heading">
     <p class="section-kicker">{{ translation.translate('flow.processingSection') }}</p>
@@ -7,7 +10,6 @@
     </div>
     <h2 id="processing-heading">{{ translation.translate('flow.processingHeading') }}</h2>
     <p class="flow-text">{{ translation.translate('flow.processingText') }}</p>
-    <p class="flow-note">{{ translation.translate('flow.processingNote') }}</p>
   </section>
 } @else if (phase() === 'results') {
   <section class="flow-screen panel" aria-labelledby="results-heading">
@@ -15,12 +17,19 @@
     <h2 id="results-heading">{{ translation.translate('flow.resultsHeading') }}</h2>
     <p class="flow-text">{{ translation.translate('flow.resultsText') }}</p>
 
-    <div class="result-preview">
-      @if (result()?.decodedImageUrl; as preview) {
-        <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -->
-        <img [src]="preview" [alt]="translation.translate('flow.receivedImage')" />
+    <div class="image-comparison result-comparison">
+      @for (image of [
+        { url: result()?.originalImageUrl, label: 'summary.original' },
+        { url: result()?.uncorrectedImageUrl, label: 'summary.errors' },
+        { url: result()?.decodedImageUrl, label: 'summary.recovered' }
+      ]; track image.label) {
+        <figure class="comparison-card">
+          @if (image.url; as preview) {
+            <img [src]="preview" [alt]="translation.translate(image.label)" />
+          }
+          <figcaption>{{ translation.translate(image.label) }}</figcaption>
+        </figure>
       }
-      <span>{{ translation.translate('flow.receivedImage') }}</span>
     </div>
 
     <div class="result-grid">
@@ -39,7 +48,41 @@
         <span>{{ translation.translate('flow.pixelError') }}</span>
         <small>{{ translation.translate('flow.fromApi') }}</small>
       </div>
+      <div class="result-card">
+        <strong>{{ result()?.metrics?.codingOverheadPercentage | number: '1.0-2' }}%</strong>
+        <span>{{ translation.translate('flow.overhead') }}</span>
+      </div>
+      <div class="result-card">
+        <strong>{{ result()?.metrics?.meanAbsoluteBrightnessError | number: '1.0-2' }}</strong>
+        <span>{{ translation.translate('flow.brightnessError') }}</span>
+      </div>
+      <div class="result-card">
+        <strong>{{ result()?.metrics?.uncorrectableBlockCount }}</strong>
+        <span>{{ translation.translate('flow.uncorrectable') }}</span>
+      </div>
     </div>
+
+    <section class="error-overlay-panel" aria-labelledby="error-overlay-heading">
+      <h3 class="error-overlay-heading" id="error-overlay-heading">
+        {{ translation.translate('flow.errorOverlay') }}
+      </h3>
+      <div class="overlay-preview">
+        @if (result()?.decodedImageUrl; as preview) {
+          <img [src]="preview" [alt]="translation.translate('flow.errorOverlay')" />
+          @for (region of result()?.errorRegions ?? []; track region.blockIndex) {
+            <span class="error-region" [class.corrected]="region.status === 'corrected'"
+              [style.left.%]="region.x / 4" [style.top.%]="region.y / 3"
+              [style.width.%]="region.width / 4" [style.height.%]="region.height / 3"
+              [attr.title]="region.status"></span>
+          }
+        }
+      </div>
+      <div class="error-legend">
+        <span><i class="legend-swatch uncorrectable"></i>{{ translation.translate('flow.uncorrectableLegend') }}</span>
+        <span><i class="legend-swatch corrected"></i>{{ translation.translate('flow.correctedLegend') }}</span>
+        <span><i class="legend-swatch undetected"></i>{{ translation.translate('flow.undetectedLegend') }}</span>
+      </div>
+    </section>
 
     <button class="primary-button flow-action" type="button" (click)="summary.emit()">
       {{ translation.translate('flow.viewSummary') }}
@@ -99,13 +142,20 @@
                 : result()?.decodedImageUrl;
             as preview
           ) {
-            <!-- eslint-disable-next-line @angular-eslint/template/prefer-ngsrc -->
             <img [src]="preview" [alt]="translation.translate(label)" />
           }
           <figcaption>{{ translation.translate(label) }}</figcaption>
         </figure>
       }
     </div>
+
+    @if (result(); as simulation) {
+      <div class="result-grid summary-metrics">
+        <div class="result-card"><strong>{{ simulation.metrics.originalBitCount }}</strong><span>{{ translation.translate('flow.originalBits') }}</span></div>
+        <div class="result-card"><strong>{{ simulation.metrics.correctedBlockCount }}</strong><span>{{ translation.translate('flow.corrected') }}</span></div>
+        <div class="result-card"><strong>{{ simulation.metrics.uncorrectableBlockCount }}</strong><span>{{ translation.translate('flow.uncorrectable') }}</span></div>
+      </div>
+    }
 
     <button class="primary-button flow-action" type="button" (click)="restart.emit()">
       {{ translation.translate('flow.runAgain') }}

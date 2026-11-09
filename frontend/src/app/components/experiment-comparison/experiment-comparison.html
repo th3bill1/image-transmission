@@ -1,0 +1,84 @@
+<!-- eslint-disable @angular-eslint/template/no-inline-styles -->
+<!-- eslint-disable @angular-eslint/template/cyclomatic-complexity -->
+<section class="panel experiment-panel" aria-labelledby="experiment-heading">
+  <div class="panel-heading">
+    <div>
+      <p class="section-kicker">{{ translation.translate('experiment.section') }}</p>
+      <h2 id="experiment-heading">{{ translation.translate('experiment.heading') }}</h2>
+    </div>
+    <button class="icon-button" type="button" [attr.aria-label]="translation.translate('experiment.close')" (click)="closed.emit()">
+      <svg lucideX size="18"></svg>
+    </button>
+  </div>
+
+  <p class="flow-text">{{ translation.translate('experiment.text') }}</p>
+  <div class="experiment-form">
+    <fieldset>
+      <legend>{{ translation.translate('experiment.codecs') }}</legend>
+      @for (codec of codecs(); track codec.id) {
+        <label class="check-option">
+          <input type="checkbox" [checked]="isSelected(selectedCodecs, codec.id)" (change)="toggle(selectedCodecs, codec.id)" />
+          <span>{{ codec.name }}</span>
+        </label>
+      }
+    </fieldset>
+    <fieldset>
+      <legend>{{ translation.translate('experiment.noiseModels') }}</legend>
+      @for (noise of noiseModels(); track noise.id) {
+        <label class="check-option">
+          <input type="checkbox" [checked]="isSelected(selectedNoiseModels, noise.id)" (change)="toggle(selectedNoiseModels, noise.id)" />
+          <span>{{ noise.name }}</span>
+        </label>
+      }
+    </fieldset>
+    <label>{{ translation.translate('experiment.probabilities') }}
+      <input type="text" [(ngModel)]="errorProbabilities" />
+    </label>
+    <label>{{ translation.translate('experiment.seeds') }}
+      <input type="text" [(ngModel)]="randomSeeds" />
+    </label>
+    <label>{{ translation.translate('simulation.burstLength') }}
+      <input type="number" min="1" [(ngModel)]="burstLength" />
+    </label>
+    <label>{{ translation.translate('simulation.burstCount') }}
+      <input type="number" min="1" [(ngModel)]="burstCount" />
+    </label>
+  </div>
+  <button class="primary-button" type="button" [disabled]="busy() || !selectedCodecs.length || !selectedNoiseModels.length" (click)="submit()">
+    <svg lucidePlay size="16"></svg>{{ translation.translate('experiment.run') }}
+  </button>
+
+  @if (busy()) {
+    <p class="flow-note">{{ translation.translate('experiment.running') }}</p>
+  } @else if (result(); as experiment) {
+    <section class="experiment-results" aria-labelledby="experiment-results-heading">
+      <h3 id="experiment-results-heading">{{ translation.translate('experiment.results') }}</h3>
+      <div class="experiment-charts">
+        @for (metric of chartMetrics; track metric.key) {
+          <div class="chart">
+            <h4>{{ translation.translate(metric.label) }}</h4>
+            @for (row of experiment.rows; track row.simulationId) {
+              <div class="bar-row">
+                <span>{{ row.codec }} / {{ row.noiseModel }}</span>
+                <div class="bar-track"><i [style.width]="barWidth(metricValue(row, metric.key), metric.key)"></i></div>
+                <strong>{{ metricValue(row, metric.key) | number: '1.0-2' }}</strong>
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <div class="experiment-table-wrap">
+        <table>
+          <thead><tr><th>Codec</th><th>Noise</th><th>p</th><th>Redundancy</th><th>Pixel error</th><th>MAE</th></tr></thead>
+          <tbody>
+            @for (row of experiment.rows; track row.simulationId) {
+              <tr><td>{{ row.codec }}</td><td>{{ row.noiseModel }}</td><td>{{ row.errorProbability }}</td><td>{{ row.metrics.redundantBitCount }}</td><td>{{ row.metrics.incorrectPixelPercentage | number: '1.0-2' }}%</td><td>{{ row.metrics.meanAbsoluteBrightnessError | number: '1.0-2' }}</td></tr>
+            } @empty {
+              <tr><td colspan="6">{{ translation.translate('experiment.empty') }}</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+</section>

@@ -13,17 +13,20 @@ import {
 import { TranslationService } from './services/translation-service/translation.service';
 import { ImageService } from './services/image-service/image.service';
 import { SimulationService } from './services/simulation-service/simulation.service';
+import { ExperimentComparison } from './components/experiment-comparison/experiment-comparison';
 import { ExperimentService } from './services/experiment-service/experiment.service';
 import { ExportService } from './services/export-service/export.service';
 import {
   CodecDescriptor,
+  ExperimentRequest,
+  ExperimentResult,
   NoiseModelDescriptor,
   SimulationResult as ApiSimulationResult
 } from './services/web-api/web-api.models';
 import { WebApiService } from './services/web-api/web-api.service';
 
 @Component({
-  imports: [AppHeader, ImageUpload, SimulationControls, SimulationResult],
+  imports: [AppHeader, ImageUpload, SimulationControls, SimulationResult, ExperimentComparison],
   selector: 'app-root',
   templateUrl: './app.html',
   host: {
@@ -68,6 +71,12 @@ export class App implements OnInit, OnDestroy {
   protected readonly grayscaleImageId = signal<string | null>(null);
 
   protected readonly simulationResult = signal<ApiSimulationResult | null>(null);
+
+  protected readonly experimentResult = signal<ExperimentResult | null>(null);
+
+  protected readonly experimentVisible = signal(false);
+
+  protected readonly experimentBusy = signal(false);
 
   protected codec = 'hamming74';
 
@@ -210,24 +219,17 @@ export class App implements OnInit, OnDestroy {
   }
 
   protected async runExperiment(): Promise<void> {
-    const file = this.selectedFile();
-    if (!file || this.codecs().length === 0 || this.noiseModels().length === 0) {
-      return;
-    }
+    this.experimentVisible.set(true);
+  }
+
+  protected async submitExperiment(request: ExperimentRequest): Promise<void> {
+    this.experimentBusy.set(true);
     try {
-      await firstValueFrom(this.experimentService.run({
-        fileName: file.name,
-        codecs: this.codecs().map(codec => codec.id),
-        noiseModels: this.noiseModels().map(noise => noise.id),
-        errorProbabilities: [this.errorProbability],
-        randomSeeds: this.randomSeed === null ? [] : [this.randomSeed],
-        burstLength: this.burstLength,
-        burstCount: this.burstCount,
-        imageId: this.grayscaleImageId()
-      }));
-      this.simulationMessage.set(this.translation.translate('simulation.compareStarted'));
+      this.experimentResult.set(await firstValueFrom(this.experimentService.run(request)));
     } catch {
       this.simulationMessage.set(this.translation.translate('simulation.failed'));
+    } finally {
+      this.experimentBusy.set(false);
     }
   }
 

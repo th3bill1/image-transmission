@@ -55,5 +55,17 @@
         <p class="simulation-message" role="alert">{{ catalogMessage() }}</p>
       }
     </div>
+    @if (experimentVisible()) {
+      <app-experiment-comparison
+        [codecs]="codecs()"
+        [noiseModels]="noiseModels()"
+        [result]="experimentResult()"
+        [busy]="experimentBusy()"
+        [fileName]="selectedFile()?.name ?? ''"
+        [imageId]="grayscaleImageId()"
+        (closed)="experimentVisible.set(false)"
+        (run)="submitExperiment($event)"
+      />
+    }
   }
 </main>
