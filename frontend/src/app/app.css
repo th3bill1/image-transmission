@@ -12,6 +12,7 @@ app-root {
   --accent-dark: #511EA4;
   --vivid-accent: #71A41E;
   --vivid-accent-ink: #263609;
+  --vivid-accent-muted: #5d8619;
   --button-background: #f0eafe;
   --shadow: 0 24px 70px rgba(73, 43, 122, 0.12);
   color-scheme: light;
@@ -47,6 +48,7 @@ app-root.dark-theme {
   --accent-dark: #d8c5ff;
   --vivid-accent: #C7F65C;
   --vivid-accent-ink: #24300f;
+  --vivid-accent-muted: #a8d84b;
   --button-background: #342747;
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
   color-scheme: dark;
@@ -680,6 +682,47 @@ input[type='number']::-webkit-outer-spin-button {
   cursor: not-allowed;
   opacity: 0.5;
 }
+.control-footer .secondary-button {
+  background: color-mix(in srgb, var(--vivid-accent) 12%, var(--field));
+  border: 0;
+  border-radius: 0.7rem;
+  color: var(--vivid-accent-muted);
+  font-size: 0.78rem;
+  font-weight: 850;
+  gap: 0.55rem;
+  padding: 0.85rem 1.05rem;
+}
+.control-footer .secondary-button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--vivid-accent) 20%, var(--field));
+  border-color: var(--vivid-accent-muted);
+}
+.experiment-panel .icon-button {
+  min-height: 2rem;
+  padding: 0.4rem;
+}
+.experiment-results {
+  background: color-mix(in srgb, var(--field) 48%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+.experiment-results h3 {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 0.55rem;
+  margin-bottom: 0;
+  padding-bottom: 0.8rem;
+}
+.experiment-results h3::before {
+  background: var(--vivid-accent);
+  border-radius: 999px;
+  content: '';
+  display: block;
+  height: 0.65rem;
+  width: 0.65rem;
+}
 .error-overlay-panel {
   background: color-mix(in srgb, var(--field) 62%, transparent);
   border: 1px solid var(--line);
@@ -778,17 +821,10 @@ input[type='number']::-webkit-outer-spin-button {
   flex-wrap: wrap;
   gap: 0.65rem;
   padding: 0.75rem;
-  transition:
-    border-color 160ms ease,
-    background 160ms ease,
-    box-shadow 160ms ease;
 }
 .experiment-form fieldset { margin: 0; }
-.experiment-form fieldset:focus-within,
 .experiment-form label:focus-within {
-  background: var(--surface);
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  outline: none;
 }
 .experiment-form legend {
   color: var(--ink);
@@ -825,13 +861,20 @@ input[type='number']::-webkit-outer-spin-button {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(2, 1fr);
-  margin: 1.25rem 0;
+  margin: 1rem 0 1.25rem;
 }
 .chart {
   background: color-mix(in srgb, var(--field) 82%, var(--surface));
   border: 1px solid var(--line);
   border-radius: 0.8rem;
   padding: 0.9rem;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.chart:hover {
+  border-color: color-mix(in srgb, var(--vivid-accent) 42%, var(--line));
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--vivid-accent) 10%, transparent);
 }
 .chart h4 {
   color: var(--ink);
