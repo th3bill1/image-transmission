@@ -27,7 +27,23 @@
           @if (image.url; as preview) {
             <img [src]="preview" [alt]="translation.translate(image.label)" />
           }
-          <figcaption>{{ translation.translate(image.label) }}</figcaption>
+          <figcaption>
+            <span>{{ translation.translate(image.label) }}</span>
+            <button
+              class="image-download-button"
+              type="button"
+              (click)="requestImageExport(
+                image.label === 'summary.original'
+                  ? 'original'
+                  : image.label === 'summary.errors'
+                    ? 'uncorrected'
+                    : 'decoded'
+              )"
+            >
+              <svg lucideDownload size="14"></svg>
+              {{ translation.translate('flow.downloadImage') }}
+            </button>
+          </figcaption>
         </figure>
       }
     </div>
@@ -89,13 +105,10 @@
       <svg lucideArrowRight aria-hidden="true" size="17"></svg>
     </button>
     <div class="flow-actions">
-      <button class="secondary-button" type="button" (click)="exportRequested.emit('png')">
-        <svg lucideDownload size="16"></svg> PNG
-      </button>
-      <button class="secondary-button" type="button" (click)="exportRequested.emit('json')">
+      <button class="secondary-button" type="button" (click)="requestReportExport('json')">
         <svg lucideDownload size="16"></svg> JSON
       </button>
-      <button class="secondary-button" type="button" (click)="exportRequested.emit('csv')">
+      <button class="secondary-button" type="button" (click)="requestReportExport('csv')">
         <svg lucideDownload size="16"></svg> CSV
       </button>
     </div>
@@ -144,7 +157,23 @@
           ) {
             <img [src]="preview" [alt]="translation.translate(label)" />
           }
-          <figcaption>{{ translation.translate(label) }}</figcaption>
+          <figcaption>
+            <span>{{ translation.translate(label) }}</span>
+            <button
+              class="image-download-button"
+              type="button"
+              (click)="requestImageExport(
+                label === 'summary.original'
+                  ? 'original'
+                  : label === 'summary.errors'
+                    ? 'uncorrected'
+                    : 'decoded'
+              )"
+            >
+              <svg lucideDownload size="14"></svg>
+              {{ translation.translate('flow.downloadImage') }}
+            </button>
+          </figcaption>
         </figure>
       }
     </div>

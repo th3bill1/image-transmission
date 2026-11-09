@@ -91,6 +91,7 @@
   "summary.original": "Original image",
   "summary.errors": "Image with errors",
   "summary.recovered": "Image after recovery",
+  "flow.downloadImage": "Download image",
   "flow.overhead": "Coding overhead",
   "flow.brightnessError": "Mean brightness error",
   "flow.uncorrectable": "Uncorrectable blocks",

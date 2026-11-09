@@ -2,7 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 import { LucideArrowRight, LucideCheck, LucideDownload, LucideShieldCheck, LucideSparkles } from '@lucide/angular';
 import { TranslationService } from '../../services/translation-service/translation.service';
-import { SimulationResult as ApiSimulationResult } from '../../services/web-api/web-api.models';
+import {
+  ExportRequest,
+  SimulationResult as ApiSimulationResult
+} from '../../services/web-api/web-api.models';
 
 export type SimulationPhase = 'processing' | 'results' | 'summary';
 
@@ -37,5 +40,13 @@ export class SimulationResult {
 
   readonly summary = output<void>();
 
-  readonly exportRequested = output<'json' | 'csv' | 'png'>();
+  readonly exportRequested = output<ExportRequest>();
+
+  protected requestImageExport(asset: ExportRequest['asset']): void {
+    this.exportRequested.emit({ format: 'png', asset });
+  }
+
+  protected requestReportExport(format: 'json' | 'csv'): void {
+    this.exportRequested.emit({ format, asset: 'report' });
+  }
 }

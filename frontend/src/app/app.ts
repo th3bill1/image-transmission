@@ -20,6 +20,7 @@ import {
   CodecDescriptor,
   ExperimentRequest,
   ExperimentResult,
+  ExportRequest,
   NoiseModelDescriptor,
   SimulationResult as ApiSimulationResult
 } from './services/web-api/web-api.models';
@@ -233,19 +234,16 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
-  protected async exportSimulation(format: 'json' | 'csv' | 'png'): Promise<void> {
+  protected async exportSimulation(request: ExportRequest): Promise<void> {
     const result = this.simulationResult();
     if (!result) return;
     try {
-      const descriptor = await firstValueFrom(this.exportService.create(result.id, {
-        format,
-        asset: format === 'png' ? 'decoded' : 'report'
-      }));
+      const descriptor = await firstValueFrom(this.exportService.create(result.id, request));
       const content = await firstValueFrom(this.exportService.download(descriptor.id));
       const url = URL.createObjectURL(content);
       const link = document.createElement('a');
       link.href = url;
-      link.download = descriptor.fileName ?? `simulation.${format}`;
+      link.download = descriptor.fileName ?? `simulation.${request.format}`;
       link.click();
       URL.revokeObjectURL(url);
     } catch {

@@ -91,6 +91,7 @@
   "summary.original": "Obraz oryginalny",
   "summary.errors": "Obraz z błędami",
   "summary.recovered": "Obraz po odzyskaniu",
+  "flow.downloadImage": "Pobierz obraz",
   "flow.overhead": "Narzut kodowania",
   "flow.brightnessError": "Średni błąd jasności",
   "flow.uncorrectable": "Bloki niekorygowalne",
