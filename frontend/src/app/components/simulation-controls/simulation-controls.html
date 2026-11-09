@@ -46,24 +46,17 @@
         <span class="select-chevron" aria-hidden="true"></span>
       </summary>
       <div class="select-options" role="listbox" aria-labelledby="noise-model-label">
-        <button
-          type="button"
-          role="option"
-          [attr.aria-selected]="noiseModel() === 'independent'"
-          [class.selected]="noiseModel() === 'independent'"
-          (click)="selectNoiseModel('independent'); noiseMenu.open = false"
-        >
-          {{ translation.translate('simulation.independent') }}
-        </button>
-        <button
-          type="button"
-          role="option"
-          [attr.aria-selected]="noiseModel() === 'burst'"
-          [class.selected]="noiseModel() === 'burst'"
-          (click)="selectNoiseModel('burst'); noiseMenu.open = false"
-        >
-          {{ translation.translate('simulation.burst') }}
-        </button>
+        @for (option of noiseOptions(); track option.value) {
+          <button
+            type="button"
+            role="option"
+            [attr.aria-selected]="noiseModel() === option.value"
+            [class.selected]="noiseModel() === option.value"
+            (click)="selectNoiseModel(option.value); noiseMenu.open = false"
+          >
+            {{ option.label }}
+          </button>
+        }
       </div>
     </details>
   </div>
@@ -140,6 +133,9 @@
     >
       {{ translation.translate('simulation.submit') }}
       <svg lucideArrowRight aria-hidden="true" size="17"></svg>
+    </button>
+    <button class="secondary-button" type="button" [disabled]="!previewUrl()" (click)="experimentStarted.emit()">
+      {{ translation.translate('simulation.compare') }}
     </button>
   </div>
   <p class="simulation-message" role="status" [hidden]="!simulationMessage()">

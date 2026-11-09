@@ -45,6 +45,17 @@
       {{ translation.translate('flow.viewSummary') }}
       <svg lucideArrowRight aria-hidden="true" size="17"></svg>
     </button>
+    <div class="flow-actions">
+      <button class="secondary-button" type="button" (click)="exportRequested.emit('png')">
+        <svg lucideDownload size="16"></svg> PNG
+      </button>
+      <button class="secondary-button" type="button" (click)="exportRequested.emit('json')">
+        <svg lucideDownload size="16"></svg> JSON
+      </button>
+      <button class="secondary-button" type="button" (click)="exportRequested.emit('csv')">
+        <svg lucideDownload size="16"></svg> CSV
+      </button>
+    </div>
   </section>
 } @else {
   <section class="flow-screen panel summary-screen" aria-labelledby="summary-heading">

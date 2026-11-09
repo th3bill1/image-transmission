@@ -53,6 +53,7 @@ export class WebApiService {
     form.append('errorProbability', String(configuration.errorProbability));
     form.append('burstLength', String(configuration.burstLength));
     form.append('burstCount', String(configuration.burstCount));
+    form.append('imageId', configuration.imageId ?? '');
     if (configuration.randomSeed !== null) {
       form.append('randomSeed', String(configuration.randomSeed));
     }

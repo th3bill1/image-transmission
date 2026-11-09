@@ -37,6 +37,7 @@ export interface SimulationConfiguration {
   burstLength: number;
   burstCount: number;
   randomSeed: number | null;
+  imageId?: string | null;
 }
 
 export interface SimulationRequest {

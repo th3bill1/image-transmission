@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
-import { LucideArrowRight, LucideCheck, LucideShieldCheck, LucideSparkles } from '@lucide/angular';
+import { LucideArrowRight, LucideCheck, LucideDownload, LucideShieldCheck, LucideSparkles } from '@lucide/angular';
 import { TranslationService } from '../../services/translation-service/translation.service';
 import { SimulationResult as ApiSimulationResult } from '../../services/web-api/web-api.models';
 
@@ -16,7 +16,7 @@ export interface SimulationParameters {
 }
 
 @Component({
-  imports: [CommonModule, LucideArrowRight, LucideCheck, LucideShieldCheck, LucideSparkles],
+  imports: [CommonModule, LucideArrowRight, LucideCheck, LucideDownload, LucideShieldCheck, LucideSparkles],
   selector: 'app-simulation-result',
   templateUrl: './simulation-result.html'
 })
@@ -36,4 +36,6 @@ export class SimulationResult {
   readonly restart = output<void>();
 
   readonly summary = output<void>();
+
+  readonly exportRequested = output<'json' | 'csv' | 'png'>();
 }

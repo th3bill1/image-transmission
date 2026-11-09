@@ -1,4 +1,4 @@
-import { Component, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { AppHeader } from './components/app-header/app-header';
 import { ImageUpload } from './components/image-upload/image-upload';
@@ -13,7 +13,14 @@ import {
 import { TranslationService } from './services/translation-service/translation.service';
 import { ImageService } from './services/image-service/image.service';
 import { SimulationService } from './services/simulation-service/simulation.service';
-import { SimulationResult as ApiSimulationResult } from './services/web-api/web-api.models';
+import { ExperimentService } from './services/experiment-service/experiment.service';
+import { ExportService } from './services/export-service/export.service';
+import {
+  CodecDescriptor,
+  NoiseModelDescriptor,
+  SimulationResult as ApiSimulationResult
+} from './services/web-api/web-api.models';
+import { WebApiService } from './services/web-api/web-api.service';
 
 @Component({
   imports: [AppHeader, ImageUpload, SimulationControls, SimulationResult],
@@ -23,12 +30,18 @@ import { SimulationResult as ApiSimulationResult } from './services/web-api/web-
     '[class.dark-theme]': 'isDarkMode'
   }
 })
-export class App implements OnDestroy {
+export class App implements OnInit, OnDestroy {
   private readonly translation = inject(TranslationService);
 
   private readonly imageService = inject(ImageService);
 
   private readonly simulationService = inject(SimulationService);
+
+  private readonly experimentService = inject(ExperimentService);
+
+  private readonly exportService = inject(ExportService);
+
+  private readonly api = inject(WebApiService);
 
   isDarkMode = true;
 
@@ -45,6 +58,14 @@ export class App implements OnDestroy {
   protected readonly uploadError = signal('');
 
   protected readonly simulationMessage = signal('');
+
+  protected readonly catalogMessage = signal('');
+
+  protected readonly codecs = signal<CodecDescriptor[]>([]);
+
+  protected readonly noiseModels = signal<NoiseModelDescriptor[]>([]);
+
+  protected readonly grayscaleImageId = signal<string | null>(null);
 
   protected readonly simulationResult = signal<ApiSimulationResult | null>(null);
 
@@ -63,32 +84,46 @@ export class App implements OnDestroy {
   protected readonly simulationPhase = signal<SimulationPhase | null>(null);
 
   protected get codecOptions(): readonly CodecOption[] {
-    return [
-      {
-        value: 'uncoded',
-        label: this.translation.translate('codec.uncoded.label'),
-        description: this.translation.translate('codec.uncoded.description')
-      },
-      {
-        value: 'hamming74',
-        label: this.translation.translate('codec.hamming74.label'),
-        description: this.translation.translate('codec.hamming74.description')
-      },
-      {
-        value: 'extended-hamming84',
-        label: this.translation.translate('codec.extendedHamming84.label'),
-        description: this.translation.translate('codec.extendedHamming84.description')
-      },
-      {
-        value: 'bch',
-        label: this.translation.translate('codec.bch.label'),
-        description: this.translation.translate('codec.bch.description')
-      }
-    ];
+    return this.codecs().map(codec => ({
+      value: codec.id,
+      label: codec.name,
+      description: codec.description
+    }));
+  }
+
+  protected get noiseOptions(): readonly CodecOption[] {
+    return this.noiseModels().map(noise => ({
+      value: noise.id,
+      label: noise.name,
+      description: noise.description
+    }));
   }
 
   protected get selectedCodecDescription(): string {
     return this.codecOptions.find(option => option.value === this.codec)?.description ?? '';
+  }
+
+  public ngOnInit(): void {
+    void this.loadCatalogs();
+  }
+
+  private async loadCatalogs(): Promise<void> {
+    try {
+      const [codecs, noiseModels] = await Promise.all([
+        firstValueFrom(this.api.getCodecs()),
+        firstValueFrom(this.api.getNoiseModels())
+      ]);
+      this.codecs.set(codecs);
+      this.noiseModels.set(noiseModels);
+      if (codecs.length > 0 && !codecs.some(codec => codec.id === this.codec)) {
+        this.codec = codecs[0].id;
+      }
+      if (noiseModels.length > 0 && !noiseModels.some(noise => noise.id === this.noiseModel)) {
+        this.noiseModel = noiseModels[0].id;
+      }
+    } catch {
+      this.catalogMessage.set(this.translation.translate('simulation.catalogFailed'));
+    }
   }
 
   protected toggleTheme(): void {
@@ -116,6 +151,7 @@ export class App implements OnDestroy {
     this.isUploading.set(true);
     try {
       const grayscale = await this.imageService.uploadAndGetGrayscale(file);
+      this.grayscaleImageId.set(grayscale.id);
       this.previewUrl.set(grayscale.url);
       this.imageDimensions.set(this.translation.translate('image.dimensions', {
         width: grayscale.width,
@@ -123,6 +159,7 @@ export class App implements OnDestroy {
       }));
     } catch {
       this.selectedFile.set(null);
+      this.grayscaleImageId.set(null);
       this.uploadError.set(this.translation.translate('image.uploadFailed'));
     } finally {
       this.isUploading.set(false);
@@ -133,6 +170,7 @@ export class App implements OnDestroy {
     if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
     if (this.originalPreviewUrl()) URL.revokeObjectURL(this.originalPreviewUrl()!);
     this.selectedFile.set(null);
+    this.grayscaleImageId.set(null);
     this.originalPreviewUrl.set(null);
     this.previewUrl.set(null);
     this.isUploading.set(false);
@@ -157,7 +195,8 @@ export class App implements OnDestroy {
         errorProbability: this.errorProbability,
         burstLength: this.burstLength,
         burstCount: this.burstCount,
-        randomSeed: this.randomSeed
+        randomSeed: this.randomSeed,
+        imageId: this.grayscaleImageId()
       });
       const result = await firstValueFrom(simulation$);
       await this.waitForMinimumProcessingTime(startedAt);
@@ -167,6 +206,48 @@ export class App implements OnDestroy {
       await this.waitForMinimumProcessingTime(startedAt);
       this.simulationPhase.set(null);
       this.simulationMessage.set(this.translation.translate('simulation.failed'));
+    }
+  }
+
+  protected async runExperiment(): Promise<void> {
+    const file = this.selectedFile();
+    if (!file || this.codecs().length === 0 || this.noiseModels().length === 0) {
+      return;
+    }
+    try {
+      await firstValueFrom(this.experimentService.run({
+        fileName: file.name,
+        codecs: this.codecs().map(codec => codec.id),
+        noiseModels: this.noiseModels().map(noise => noise.id),
+        errorProbabilities: [this.errorProbability],
+        randomSeeds: this.randomSeed === null ? [] : [this.randomSeed],
+        burstLength: this.burstLength,
+        burstCount: this.burstCount,
+        imageId: this.grayscaleImageId()
+      }));
+      this.simulationMessage.set(this.translation.translate('simulation.compareStarted'));
+    } catch {
+      this.simulationMessage.set(this.translation.translate('simulation.failed'));
+    }
+  }
+
+  protected async exportSimulation(format: 'json' | 'csv' | 'png'): Promise<void> {
+    const result = this.simulationResult();
+    if (!result) return;
+    try {
+      const descriptor = await firstValueFrom(this.exportService.create(result.id, {
+        format,
+        asset: format === 'png' ? 'decoded' : 'report'
+      }));
+      const content = await firstValueFrom(this.exportService.download(descriptor.id));
+      const url = URL.createObjectURL(content);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = descriptor.fileName ?? `simulation.${format}`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      this.simulationMessage.set(this.translation.translate('simulation.exportFailed'));
     }
   }
 

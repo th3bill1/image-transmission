@@ -21,6 +21,7 @@
       }"
       (summary)="showSummary()"
       (restart)="resetSimulation()"
+      (exportRequested)="exportSimulation($event)"
     />
   } @else {
     <div class="workspace">
@@ -38,6 +39,7 @@
       <app-simulation-controls
         [previewUrl]="previewUrl()"
         [codecOptions]="codecOptions"
+        [noiseOptions]="noiseOptions"
         [selectedCodecDescription]="selectedCodecDescription"
         [simulationMessage]="simulationMessage()"
         [(codec)]="codec"
@@ -47,7 +49,11 @@
         [(burstCount)]="burstCount"
         [(randomSeed)]="randomSeed"
         (simulationStarted)="startSimulation()"
+        (experimentStarted)="runExperiment()"
       />
+      @if (catalogMessage()) {
+        <p class="simulation-message" role="alert">{{ catalogMessage() }}</p>
+      }
     </div>
   }
 </main>

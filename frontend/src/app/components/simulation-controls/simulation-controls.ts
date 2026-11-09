@@ -23,6 +23,8 @@ export class SimulationControls {
 
   readonly codecOptions = input<readonly CodecOption[]>([]);
 
+  readonly noiseOptions = input<readonly CodecOption[]>([]);
+
   readonly selectedCodecDescription = input('');
 
   readonly noiseModel = model('');
@@ -39,6 +41,8 @@ export class SimulationControls {
 
   readonly simulationStarted = output<void>();
 
+  readonly experimentStarted = output<void>();
+
   protected selectCodec(value: string): void {
     this.codec.set(value);
   }
@@ -52,8 +56,7 @@ export class SimulationControls {
   }
 
   protected noiseModelLabel(): string {
-    const key = this.noiseModel() === 'burst' ? 'simulation.burst' : 'simulation.independent';
-    return this.translation.translate(key);
+    return this.noiseOptions().find(option => option.value === this.noiseModel())?.label ?? '';
   }
 
   protected closeOtherMenu(openedMenu: HTMLDetailsElement, otherMenu: HTMLDetailsElement): void {
